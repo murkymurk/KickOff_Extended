@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stärkenbasierte Exzellenz für Müller · The Strength Hack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-heading: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Outfit', -apple-system, sans-serif;
+  --color-bg:           #FDFBF7;
+  --color-bg-alt:       #F5F0E8;
+  --color-bg-dark:      #1A1714;
+  --color-bg-dark-alt:  #242018;
+  --color-text:         #2C2824;
+  --color-text-muted:   #7A7168;
+  --color-text-light:   #A89F94;
+  --color-text-on-dark: #F5F0E8;
+  --color-accent:       #D4652A;
+  --color-accent-hover: #BF5520;
+  --color-accent-light: rgba(212,101,42,.08);
+  --color-accent-glow:  rgba(212,101,42,.15);
+  --color-warm-gold:    #C49A2A;
+  --color-border:       rgba(44,40,36,.10);
+  --color-border-dark:  rgba(245,240,232,.10);
+  --radius-pill: 980px;
+  --radius-card:  20px;
+  --radius-small: 12px;
+  --sidebar-w: 210px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-font-smoothing:antialiased;}
+body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--color-text);height:100vh;width:100vw;overflow:hidden;}
+
+/* APP SHELL */
+.app{display:flex;height:100vh;width:100vw;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:#13110e;border-right:1px solid var(--color-border-dark);display:flex;flex-direction:column;overflow:hidden;}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--color-border-dark);flex-shrink:0;}
+.sb-logo-name{font-family:var(--font-heading);font-size:15px;color:var(--color-text-on-dark);letter-spacing:-.2px;}
+.sb-logo-name span{color:var(--color-accent);}
+.sb-logo-sub{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(245,240,232,.22);margin-top:3px;}
+.sb-chapters{flex:1;overflow-y:auto;padding:12px 0;}
+.sb-ch{padding:9px 18px;cursor:pointer;border-left:3px solid transparent;transition:all .2s;}
+.sb-ch:hover{background:rgba(245,240,232,.04);}
+.sb-ch.active{border-left-color:var(--color-accent);background:rgba(212,101,42,.08);}
+.sb-ch-num{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:2px;}
+.sb-ch-title{font-size:11px;font-weight:500;color:rgba(245,240,232,.42);line-height:1.35;}
+.sb-ch.active .sb-ch-title{color:var(--color-text-on-dark);}
+.sb-dots{padding:12px 18px;border-top:1px solid var(--color-border-dark);flex-shrink:0;}
+.sb-dots-wrap{display:flex;flex-wrap:wrap;gap:4px;}
+.sb-dot{width:20px;height:20px;border-radius:6px;background:rgba(245,240,232,.07);border:1px solid transparent;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:rgba(245,240,232,.3);cursor:pointer;transition:all .2s;}
+.sb-dot:hover{background:rgba(245,240,232,.14);}
+.sb-dot.active{background:var(--color-accent);color:#fff;border-color:var(--color-accent);}
+
+/* STAGE */
+.stage{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.counter{position:absolute;top:16px;right:22px;z-index:50;font-size:12px;font-weight:500;letter-spacing:.5px;color:rgba(245,240,232,.25);pointer-events:none;}
+.counter .n{color:rgba(245,240,232,.62);font-weight:700;}
+.arr{position:absolute;bottom:20px;z-index:50;width:38px;height:38px;border-radius:50%;background:rgba(245,240,232,.06);border:1px solid var(--color-border-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(245,240,232,.32);font-size:15px;transition:all .2s;user-select:none;}
+.arr:hover{background:rgba(212,101,42,.18);border-color:rgba(212,101,42,.4);color:var(--color-accent);}
+.arr-prev{right:64px;}.arr-next{right:18px;}
+
+/* SLIDES */
+.slides{flex:1;position:relative;}
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:36px 48px 68px;
+  opacity:0;transform:translateX(28px);
+  transition:opacity .42s cubic-bezier(.25,.46,.45,.94),transform .42s cubic-bezier(.25,.46,.45,.94);
+  pointer-events:none;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all;}
+.slide.exit{opacity:0;transform:translateX(-28px);}
+.sl-dark{background:var(--color-bg-dark);}
+.sl-alt{background:var(--color-bg-alt);}
+.sl-warm{background:var(--color-bg);}
+.sl-dark::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 58% 52% at 50% 44%,rgba(212,101,42,.055) 0%,transparent 68%);}
+.sl-grid::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(245,240,232,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(245,240,232,.016) 1px,transparent 1px);background-size:52px 52px;}
+
+/* INNER */
+.inner{width:100%;max-width:1020px;position:relative;z-index:1;}
+.inner-c{text-align:center;}
+
+/* GRID LAYOUTS */
+.cols{display:grid;align-items:center;width:100%;gap:44px;}
+.c2{grid-template-columns:1fr 1fr;}
+.c6040{grid-template-columns:58% 42%;}
+.c4060{grid-template-columns:42% 58%;}
+.c3{grid-template-columns:repeat(3,1fr);}
+.c4{grid-template-columns:repeat(4,1fr);}
+
+/* TYPOGRAPHY */
+.lbl{font-family:var(--font-body);font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--color-accent);display:inline-block;margin-bottom:10px;}
+.lbl-d{color:rgba(212,101,42,.62);}
+.h1{font-family:var(--font-heading);font-size:clamp(28px,5vw,62px);line-height:1.08;letter-spacing:-1.5px;color:var(--color-text-on-dark);margin-bottom:18px;}
+.h1 em{font-style:italic;color:var(--color-accent);}
+.h2{font-family:var(--font-heading);font-size:clamp(22px,3.4vw,44px);line-height:1.15;letter-spacing:-.5px;color:var(--color-text);margin-bottom:14px;}
+.h2-l{color:var(--color-text-on-dark);}
+.h2 em{font-style:italic;color:var(--color-accent);}
+.body{font-size:clamp(12px,1.2vw,16px);line-height:1.75;color:var(--color-text-muted);}
+.body-d{color:rgba(245,240,232,.55);}
+
+/* SHARED COMPONENTS */
+.badge{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;border-radius:var(--radius-pill);border:1px solid rgba(212,101,42,.3);background:rgba(212,101,42,.08);font-size:10px;font-weight:700;color:var(--color-accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;}
+.stat-card{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;background:rgba(245,240,232,.04);border:1px solid rgba(245,240,232,.07);}
+.stat-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0;}
+.stat-label{font-size:12px;font-weight:500;color:rgba(245,240,232,.62);}
+.stat-val{font-family:var(--font-heading);font-size:20px;color:var(--color-accent);margin-left:auto;white-space:nowrap;}
+.dk-card{border-radius:var(--radius-card);border:1px solid var(--color-border-dark);background:var(--color-bg-dark-alt);padding:22px;}
+.lt-card{border-radius:var(--radius-card);border:1px solid var(--color-border);background:var(--color-bg);padding:20px;}
+.ac-card{border-radius:var(--radius-small);border:1px solid rgba(212,101,42,.2);background:rgba(212,101,42,.07);padding:16px 20px;}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;padding:13px 30px;font-family:var(--font-body);font-weight:600;font-size:14px;color:#fff;background:var(--color-accent);border:none;border-radius:var(--radius-pill);cursor:pointer;text-decoration:none;box-shadow:0 4px 18px rgba(212,101,42,.28);transition:all .3s ease;}
+.btn-p:hover{background:var(--color-accent-hover);transform:translateY(-2px);}
+
+/* HERO META */
+.hero-meta{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:36px;flex-wrap:wrap;}
+.hero-meta-item{font-size:11px;color:rgba(245,240,232,.26);letter-spacing:.3px;}
+.hero-meta-sep{color:rgba(245,240,232,.1);}
+
+/* BIG NUMBER */
+.big-num{font-family:var(--font-heading);font-size:clamp(60px,10vw,120px);line-height:1;letter-spacing:-4px;color:var(--color-accent);}
+.big-num sup{font-size:.42em;letter-spacing:0;vertical-align:top;margin-top:.18em;display:inline-block;}
+
+/* VUCA CARDS */
+.vuca-card{border-radius:16px;padding:20px 18px;border:1px solid;text-align:center;}
+.vuca-icon{font-size:32px;margin-bottom:10px;}
+.vuca-title{font-family:var(--font-heading);font-size:17px;margin-bottom:7px;line-height:1.2;}
+.vuca-body{font-size:11px;line-height:1.6;}
+
+/* HEBEL BARS */
+.hebel-bar-group{display:flex;flex-direction:column;gap:12px;}
+.hebel-row{display:flex;align-items:center;gap:12px;}
+.hebel-row-label{width:148px;flex-shrink:0;text-align:right;font-size:11px;font-weight:600;color:rgba(245,240,232,.5);line-height:1.3;}
+.hebel-track{flex:1;height:42px;border-radius:10px;background:rgba(245,240,232,.05);position:relative;overflow:hidden;}
+.hebel-fill{position:absolute;top:0;left:0;bottom:0;border-radius:10px;display:flex;align-items:center;padding:0 14px;font-family:var(--font-heading);font-size:20px;color:#fff;}
+
+/* GAP FLOW */
+.gap-flow{display:flex;flex-direction:column;gap:6px;}
+.gap-step{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;border:1px solid rgba(245,240,232,.07);background:rgba(245,240,232,.04);}
+.gap-step-icon{width:32px;height:32px;border-radius:8px;background:rgba(212,101,42,.12);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gap-step-text{font-size:12px;font-weight:500;color:rgba(245,240,232,.68);line-height:1.35;}
+.gap-barrier{display:flex;align-items:center;gap:9px;padding:10px 14px;border-radius:9px;border:1.5px dashed rgba(220,53,69,.38);background:rgba(220,53,69,.05);font-size:11px;font-weight:700;color:#d95555;}
+.gap-arrow{text-align:center;font-size:18px;color:rgba(245,240,232,.11);}
+.gap-goal{padding:14px 16px;border-radius:13px;text-align:center;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.28);}
+.gap-goal-t{font-size:13px;font-weight:700;color:var(--color-text-on-dark);}
+.gap-goal-s{font-size:10px;color:rgba(245,240,232,.32);margin-top:2px;}
+
+/* TUCKMAN */
+.tuck-phases{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative;}
+.tuck-connector{position:absolute;top:24px;left:calc(12.5% + 5px);right:calc(12.5% + 5px);height:2px;background:rgba(245,240,232,.07);z-index:0;}
+.tuck-phase{border-radius:13px;padding:16px 10px;text-align:center;border:1px solid rgba(245,240,232,.07);background:rgba(245,240,232,.04);position:relative;z-index:1;}
+.tuck-phase.storming{border-color:rgba(220,53,69,.32);background:rgba(220,53,69,.07);}
+.tuck-phase.performing{border-color:rgba(40,167,69,.22);background:rgba(40,167,69,.06);}
+.tuck-num{width:30px;height:30px;border-radius:50%;background:rgba(245,240,232,.07);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:rgba(245,240,232,.38);margin:0 auto 9px;}
+.tuck-phase.storming .tuck-num{background:rgba(220,53,69,.18);color:#d95555;}
+.tuck-name{font-family:var(--font-heading);font-size:14px;color:var(--color-text-on-dark);margin-bottom:4px;}
+.tuck-sub{font-size:10px;color:rgba(245,240,232,.3);line-height:1.4;}
+.stuck-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;margin-top:7px;border-radius:var(--radius-pill);background:rgba(220,53,69,.16);border:1px solid rgba(220,53,69,.32);font-size:8px;font-weight:700;color:#d95555;letter-spacing:1px;text-transform:uppercase;}
+
+/* KOMPASS LEGEND */
+.kd{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:9px;border:1px solid rgba(245,240,232,.06);transition:all .2s;}
+.kd.hi{background:rgba(212,101,42,.09);border-color:rgba(212,101,42,.26);}
+.kd+.kd{margin-top:6px;}
+.kd-icon{width:24px;height:24px;border-radius:6px;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.kd-icon-o{background:rgba(212,101,42,.15);}
+.kd-icon-r{background:rgba(196,42,42,.15);}
+.kd-icon-b{background:rgba(42,100,196,.15);}
+.kd-label{font-size:11px;font-weight:600;color:rgba(245,240,232,.55);flex:1;}
+.kd.hi .kd-label{color:var(--color-text-on-dark);}
+.kd-poles{font-size:9px;color:rgba(245,240,232,.2);text-align:right;line-height:1.3;}
+.kd.hi .kd-poles{color:rgba(245,240,232,.42);}
+
+/* MOCKUP */
+.mockup{background:var(--color-bg-dark-alt);border-radius:16px;border:1px solid var(--color-border-dark);overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.42);width:100%;}
+.mockup-bar{background:rgba(245,240,232,.03);border-bottom:1px solid var(--color-border-dark);padding:8px 13px;display:flex;align-items:center;gap:6px;}
+.mdot{width:8px;height:8px;border-radius:50%;}
+.mdot-r{background:#ff5f57;}.mdot-y{background:#febc2e;}.mdot-g{background:#28c840;}
+.mockup-url{flex:1;text-align:center;font-size:9px;font-weight:600;color:rgba(245,240,232,.22);letter-spacing:.5px;}
+.mockup-body{padding:14px;}
+.m-sec{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:9px;}
+.m-row{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:8px;background:rgba(245,240,232,.04);border:1px solid rgba(245,240,232,.05);margin-bottom:5px;}
+.m-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.m-name{font-size:10px;font-weight:600;color:rgba(245,240,232,.72);}
+.m-role{font-size:8px;color:rgba(245,240,232,.28);}
+.m-tag{margin-left:auto;padding:2px 6px;border-radius:var(--radius-pill);font-size:8px;font-weight:700;}
+.m-tag-o{background:rgba(212,101,42,.2);color:var(--color-accent);}
+.m-tag-b{background:rgba(42,100,196,.2);color:#6a9fd8;}
+.m-tag-g{background:rgba(40,167,69,.2);color:#4aad5f;}
+.m-matrix{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:10px;}
+.m-cell{border-radius:6px;padding:6px 4px;text-align:center;border:1px solid rgba(245,240,232,.04);font-size:8px;color:rgba(245,240,232,.28);background:rgba(245,240,232,.03);}
+.m-cell.hot{background:rgba(212,101,42,.12);border-color:rgba(212,101,42,.22);color:var(--color-accent);font-weight:700;}
+.m-shadow{margin-top:11px;padding:8px 11px;border-radius:8px;background:rgba(220,53,69,.07);border:1px solid rgba(220,53,69,.16);}
+.m-shadow-t{font-size:8px;font-weight:700;color:#d95555;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.m-shadow-bar{height:4px;border-radius:3px;background:rgba(245,240,232,.07);overflow:hidden;}
+.m-shadow-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#d95555,var(--color-accent));width:67%;}
+.m-shadow-sub{font-size:8px;color:rgba(245,240,232,.28);margin-top:3px;}
+
+/* ROI */
+.roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.roi-tile{border-radius:var(--radius-card);background:var(--color-bg-dark-alt);border:1px solid var(--color-border-dark);padding:20px 18px;display:flex;align-items:flex-start;gap:12px;}
+.roi-icon{width:42px;height:42px;border-radius:12px;font-size:20px;background:rgba(212,101,42,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.roi-title{font-family:var(--font-heading);font-size:15px;color:var(--color-text-on-dark);margin-bottom:4px;line-height:1.2;}
+.roi-body{font-size:11px;color:rgba(245,240,232,.36);line-height:1.5;}
+
+/* START STEPS */
+.start-step{flex:1;text-align:center;padding:24px 14px;border-radius:var(--radius-card);border:1px solid var(--color-border);background:var(--color-bg);margin:0 6px;}
+.start-step-num{width:48px;height:48px;border-radius:50%;background:var(--color-accent);color:#fff;font-family:var(--font-heading);font-size:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.start-step-title{font-family:var(--font-heading);font-size:15px;color:var(--color-text);margin-bottom:6px;}
+.start-step-body{font-size:11px;color:var(--color-text-muted);line-height:1.6;}
+
+/* FEATURE ROWS */
+.feat{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:11px;background:rgba(245,240,232,.04);border:1px solid rgba(245,240,232,.06);}
+.feat+.feat{margin-top:9px;}
+.feat.hi{background:rgba(212,101,42,.08);border-color:rgba(212,101,42,.17);}
+.feat-icon{width:36px;height:36px;border-radius:9px;font-size:17px;background:rgba(212,101,42,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.feat-title{font-size:12px;font-weight:700;color:var(--color-text-on-dark);margin-bottom:2px;}
+.feat-body{font-size:11px;color:rgba(245,240,232,.42);line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-name">The Strength <span>Hack</span></div>
+    <div class="sb-logo-sub">Müller · Kickoff 2025</div>
+  </div>
+  <div class="sb-chapters" id="sbCh">
+    <div class="sb-ch active" onclick="goChapter(0)"><div class="sb-ch-num">Teil 1</div><div class="sb-ch-title">Hook & Problem</div></div>
+    <div class="sb-ch" onclick="goChapter(1)"><div class="sb-ch-num">Teil 2</div><div class="sb-ch-title">Wissenschaft & Neurologie</div></div>
+    <div class="sb-ch" onclick="goChapter(2)"><div class="sb-ch-num">Teil 3</div><div class="sb-ch-title">Persönliche Inventur</div></div>
+    <div class="sb-ch" onclick="goChapter(3)"><div class="sb-ch-num">Teil 4</div><div class="sb-ch-title">Team-Dynamik & Kompass</div></div>
+    <div class="sb-ch" onclick="goChapter(4)"><div class="sb-ch-num">Teil 5</div><div class="sb-ch-title">App als Cockpit</div></div>
+    <div class="sb-ch" onclick="goChapter(5)"><div class="sb-ch-num">Teil 6</div><div class="sb-ch-title">Next Steps & ROI</div></div>
+  </div>
+  <div class="sb-dots"><div class="sb-dots-wrap" id="sbDots"></div></div>
+</aside>
+
+<!-- STAGE -->
+<main class="stage">
+  <div class="counter"><span class="n" id="cCur">1</span> / <span id="cTot">13</span></div>
+  <button class="arr arr-prev" onclick="go(-1)">←</button>
+  <button class="arr arr-next" onclick="go(1)">→</button>
+
+  <div class="slides" id="slidesEl">
+
+    <!-- S1 TITEL -->
+    <div class="slide sl-dark sl-grid active" data-ch="0">
+      <div class="inner inner-c">
+        <div class="badge">Gruppe Theo Müller · Führungsteam · Strength Hack Kickoff 2026</div>
+        <h1 class="h1" style="max-width:780px;margin:0 auto 20px;font-size:clamp(32px,5.5vw,68px);">
+          Vom Testergebnis<br>zur <em>Team-Excellence</em>
+        </h1>
+        <p style="font-size:clamp(16px,1.6vw,21px);color:rgba(245,240,232,.55);font-weight:300;max-width:560px;margin:0 auto;line-height:1.65;">
+          Wie stärkenbasierte Führung Komplexität meistert<br>und selbstorganisierende Teams entstehen
+        </p>
+        <div class="hero-meta" style="margin-top:44px;">
+          <span class="hero-meta-item" style="color:rgba(245,240,232,.4);font-size:13px;">The Strength Hack</span>
+          <span class="hero-meta-sep">·</span>
+          <span class="hero-meta-item" style="color:rgba(245,240,232,.4);font-size:13px;">60-Minuten Kick-Off</span>
+          <span class="hero-meta-sep">·</span>
+          <span class="hero-meta-item" style="color:rgba(245,240,232,.4);font-size:13px;">strength-hack.com</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2 HEROIC LEADER vs ORCHESTER -->
+    <div class="slide sl-dark" data-ch="0">
+      <div class="inner">
+        <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Das Problem</div>
+        <h2 class="h2 h2-l" style="margin-bottom:32px;font-size:clamp(26px,4vw,50px);">Das Ende des <em>heroischen</em><br>Einzelkämpfers</h2>
+        <div class="cols c2" style="gap:24px;">
+          <!-- Hero Leader -->
+          <div style="border-radius:20px;border:1.5px solid rgba(220,53,69,.5);background:rgba(220,53,69,.1);padding:32px 28px;">
+            <div style="font-size:48px;margin-bottom:16px;">🦸</div>
+            <div style="font-family:var(--font-heading);font-size:26px;color:#ff7070;margin-bottom:12px;">Der Hero-Leader</div>
+            <div style="font-size:15px;color:rgba(245,240,232,.75);line-height:1.7;margin-bottom:20px;">Alle Antworten kommen von oben. Führung durch Kontrolle &amp; Mikromanagement. Eine Person trägt alle Last.</div>
+            <div style="padding:14px 18px;border-radius:12px;background:rgba(220,53,69,.18);border:1px solid rgba(220,53,69,.35);">
+              <div style="font-size:11px;font-weight:700;color:#ff7070;letter-spacing:1.5px;margin-bottom:6px;">VUCA / BANI WELT</div>
+              <div style="font-size:13px;color:rgba(245,240,232,.65);line-height:1.55;">Brüchig · Ängstlich · Nicht-linear · Unbegreiflich</div>
+            </div>
+            <div style="margin-top:16px;font-size:16px;font-weight:700;color:#ff7070;">→ Burnout &amp; Überforderung</div>
+          </div>
+          <!-- Orchester -->
+          <div style="border-radius:20px;border:1.5px solid rgba(74,173,95,.5);background:rgba(40,167,69,.1);padding:32px 28px;">
+            <div style="font-size:48px;margin-bottom:16px;">🎼</div>
+            <div style="font-family:var(--font-heading);font-size:26px;color:#6dd98a;margin-bottom:12px;">Das Führungsorchester</div>
+            <div style="font-size:15px;color:rgba(245,240,232,.75);line-height:1.7;margin-bottom:20px;">Kollektive Intelligenz des Teams nutzen. Stärken orchestrieren statt Schwächen managen. Teams regulieren sich selbst.</div>
+            <div style="padding:14px 18px;border-radius:12px;background:rgba(40,167,69,.18);border:1px solid rgba(74,173,95,.35);">
+              <div style="font-size:11px;font-weight:700;color:#6dd98a;letter-spacing:1.5px;margin-bottom:6px;">DAS NEUE MODELL</div>
+              <div style="font-size:13px;color:rgba(245,240,232,.65);line-height:1.55;">"Welche Stärken kombinieren wir?" statt "Wer macht was genau so?"</div>
+            </div>
+            <div style="margin-top:16px;font-size:16px;font-weight:700;color:#6dd98a;">→ Performance &amp; Flow</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3 GALLUP 2026 -->
+    <div class="slide sl-dark" data-ch="0">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:40px;">
+          <!-- LEFT -->
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Gallup State of the Global Workplace 2026</div>
+            <h2 class="h2 h2-l" style="margin-bottom:24px;font-size:clamp(26px,3.8vw,48px);">Die aktuelle<br><em>Führungskrise</em></h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.7);line-height:1.75;margin-bottom:28px;">Nur noch 22 % der Manager weltweit sind wirklich engagiert. Führungskräfte berichten deutlich mehr Stress, Wut und Einsamkeit als Mitarbeiter ohne Führungsverantwortung.</p>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(245,240,232,.06);border:1px solid rgba(245,240,232,.14);">
+                <div style="font-size:26px;width:40px;text-align:center;flex-shrink:0;">😤</div>
+                <div style="font-size:15px;font-weight:500;color:rgba(245,240,232,.8);flex:1;">Täglicher Stress</div>
+                <div style="font-family:var(--font-heading);font-size:26px;color:var(--color-accent);white-space:nowrap;">+7 Pkt</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(245,240,232,.06);border:1px solid rgba(245,240,232,.14);">
+                <div style="font-size:26px;width:40px;text-align:center;flex-shrink:0;">😡</div>
+                <div style="font-size:15px;font-weight:500;color:rgba(245,240,232,.8);flex:1;">Wut &amp; Frustration</div>
+                <div style="font-family:var(--font-heading);font-size:26px;color:var(--color-accent);white-space:nowrap;">+12 Pkt</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:rgba(245,240,232,.06);border:1px solid rgba(245,240,232,.14);">
+                <div style="font-size:26px;width:40px;text-align:center;flex-shrink:0;">😶</div>
+                <div style="font-size:15px;font-weight:500;color:rgba(245,240,232,.8);flex:1;">Einsamkeit</div>
+                <div style="font-family:var(--font-heading);font-size:26px;color:var(--color-accent);white-space:nowrap;">+10 Pkt</div>
+              </div>
+            </div>
+            <div style="font-size:11px;color:rgba(245,240,232,.22);margin-top:14px;">Im Vergleich zu Teammitgliedern ohne Führungsverantwortung</div>
+          </div>
+          <!-- RIGHT -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+            <div style="text-align:center;padding:40px 32px;border-radius:24px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);width:100%;">
+              <div style="font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(212,101,42,.7);margin-bottom:14px;">Manager Engagement Global</div>
+              <div style="font-family:var(--font-heading);font-size:clamp(72px,12vw,130px);line-height:1;letter-spacing:-4px;color:var(--color-accent);">22<span style="font-size:.44em;vertical-align:top;display:inline-block;margin-top:.2em;">%</span></div>
+              <div style="font-size:15px;color:rgba(245,240,232,.55);margin-top:12px;line-height:1.6;">der Manager weltweit<br>sind noch engagiert</div>
+            </div>
+            <div style="padding:14px 20px;border-radius:14px;background:rgba(220,53,69,.1);border:1.5px solid rgba(220,53,69,.3);text-align:center;width:100%;">
+              <div style="font-size:14px;font-weight:700;color:#ff7070;">⬇ Drastischer Rückgang gegenüber Vorjahren</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S4 GOOGLE ARISTOTLE -->
+    <div class="slide sl-dark" data-ch="1">
+      <div class="inner">
+        <div class="cols c6040">
+          <div>
+            <div class="lbl lbl-d">Google Project Aristotle · 180 Teams</div>
+            <h2 class="h2 h2-l" style="margin-bottom:18px;">Das Geheimnis<br>der <em>Top-Teams</em></h2>
+            <div style="font-family:var(--font-heading);font-style:italic;font-size:clamp(14px,1.8vw,22px);color:var(--color-text-on-dark);line-height:1.45;margin-bottom:20px;padding-left:16px;border-left:3px solid var(--color-accent);">
+              "Who is on a team matters much less than how the team works together."
+            </div>
+            <div class="ac-card" style="margin-bottom:18px;">
+              <div style="display:flex;align-items:center;gap:11px;">
+                <span style="font-size:24px;">🛡️</span>
+                <div>
+                  <div style="font-family:var(--font-heading);font-size:16px;color:var(--color-text-on-dark);margin-bottom:2px;">Psychologische Sicherheit</div>
+                  <div style="font-size:11px;color:rgba(245,240,232,.45);line-height:1.5;">Der stärkste Prädiktor — angstfreies Einbringen von Ideen. Dieses Fundament wird durch Stärken produktiv gemacht.</div>
+                </div>
+              </div>
+            </div>
+            <p class="body body-d">Es ist nicht der höchste IQ. Es ist das <strong style="color:var(--color-text-on-dark);">Wie</strong> der Zusammenarbeit — und genau das gestalten wir.</p>
+          </div>
+          <div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,.26);margin-bottom:13px;text-align:center;">Die 5 Säulen</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:10px;background:rgba(212,101,42,.1);border:1px solid rgba(212,101,42,.26);">
+                <span style="font-size:16px;">🛡️</span>
+                <div><div style="font-size:11px;font-weight:700;color:var(--color-accent);">#1 Psychologische Sicherheit</div><div style="font-size:9px;color:rgba(245,240,232,.32);margin-top:1px;">Wichtigster Faktor</div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;border:1px solid rgba(245,240,232,.06);background:rgba(245,240,232,.03);"><span style="font-size:14px;">🎯</span><div style="font-size:11px;color:rgba(245,240,232,.52);">#2 Dependability · Verlässlichkeit</div></div>
+              <div style="display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;border:1px solid rgba(245,240,232,.06);background:rgba(245,240,232,.03);"><span style="font-size:14px;">🗺️</span><div style="font-size:11px;color:rgba(245,240,232,.52);">#3 Structure &amp; Clarity</div></div>
+              <div style="display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;border:1px solid rgba(245,240,232,.06);background:rgba(245,240,232,.03);"><span style="font-size:14px;">💡</span><div style="font-size:11px;color:rgba(245,240,232,.52);">#4 Meaning · Sinnhaftigkeit</div></div>
+              <div style="display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;border:1px solid rgba(245,240,232,.06);background:rgba(245,240,232,.03);"><span style="font-size:14px;">🚀</span><div style="font-size:11px;color:rgba(245,240,232,.52);">#5 Impact · Wirksamkeit</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5a NEUROSCIENCE: HIGHWAY vs DIRT ROAD -->
+    <div class="slide sl-dark" data-ch="1">
+      <div class="inner inner-c">
+        <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Neuroscience</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 32px;max-width:680px;font-size:clamp(26px,3.8vw,50px);">The Highway vs. <em>The Dirt Road</em></h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;">
+          <!-- Highway -->
+          <div style="border-radius:20px;padding:32px 28px;border:2px solid rgba(74,173,95,.5);background:rgba(40,167,69,.1);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4aad5f,#6dd98a);"></div>
+            <div style="font-size:42px;margin-bottom:12px;">🛣️</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6dd98a;margin-bottom:8px;">Neural Highway</div>
+            <div style="font-family:var(--font-heading);font-size:40px;color:#6dd98a;letter-spacing:-1px;margin-bottom:16px;">Fast.</div>
+            <p style="font-size:14px;color:rgba(245,240,232,.65);line-height:1.7;">Operating in your strengths. Energizing. Low cognitive load. Your brain built this road over <strong style="color:rgba(245,240,232,.9);">15 years of practice.</strong></p>
+          </div>
+          <!-- Dirt Road -->
+          <div style="border-radius:20px;padding:32px 28px;border:2px solid rgba(220,53,69,.5);background:rgba(220,53,69,.1);position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#b02020,#d95555);"></div>
+            <div style="font-size:42px;margin-bottom:12px;">🌿</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ff8080;margin-bottom:8px;">Dirt Road</div>
+            <div style="font-family:var(--font-heading);font-size:40px;color:#ff8080;letter-spacing:-1px;margin-bottom:16px;">Exhausting.</div>
+            <p style="font-size:14px;color:rgba(245,240,232,.65);line-height:1.7;">Forcing a weakness. High cognitive load. Synaptic pruning erased this path. <strong style="color:rgba(245,240,232,.9);">You're dragging a Ferrari through mud.</strong></p>
+          </div>
+        </div>
+        <!-- Bottom fact box -->
+        <div style="margin-top:22px;padding:18px 32px;border-radius:16px;background:rgba(245,240,232,.06);border:1.5px solid rgba(245,240,232,.15);max-width:700px;margin-left:auto;margin-right:auto;">
+          <div style="font-size:16px;color:rgba(245,240,232,.9);line-height:1.6;">
+            By age 15, your brain prunes unused pathways.<br>
+            <strong style="color:var(--color-accent);">This isn't HR theory. It's neurobiology.</strong>
+          </div>
+          <div style="font-size:11px;color:rgba(245,240,232,.3);margin-top:8px;">Synaptic Pruning — a natural brain optimization process that reinforces your strengths and deprioritizes low-use pathways.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S5b GALLUP META-ANALYSIS: ASSET MANAGEMENT -->
+    <div class="slide sl-dark" data-ch="1">
+      <div class="inner inner-c">
+        <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Gallup Meta-Analysis · 50.000 Geschäftseinheiten</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 32px;max-width:720px;font-size:clamp(26px,4vw,52px);">Asset Management is <em>ruthlessly efficient.</em></h2>
+        <!-- 3 big stat cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:860px;margin:0 auto 24px;">
+          <div style="border-radius:20px;padding:28px 20px;background:rgba(245,240,232,.06);border:1.5px solid rgba(245,240,232,.14);text-align:center;">
+            <div style="font-family:var(--font-heading);font-size:clamp(40px,6vw,68px);color:var(--color-accent);letter-spacing:-2px;line-height:1;">+19%</div>
+            <div style="font-size:14px;font-weight:700;color:rgba(245,240,232,.8);margin-top:10px;">Higher Sales</div>
+            <div style="font-size:11px;color:rgba(245,240,232,.38);margin-top:4px;">Strength-focused teams</div>
+          </div>
+          <div style="border-radius:20px;padding:28px 20px;background:rgba(212,101,42,.1);border:2px solid rgba(212,101,42,.4);text-align:center;">
+            <div style="font-family:var(--font-heading);font-size:clamp(40px,6vw,68px);color:var(--color-accent);letter-spacing:-2px;line-height:1;">+29%</div>
+            <div style="font-size:14px;font-weight:700;color:rgba(245,240,232,.8);margin-top:10px;">Higher Profit</div>
+            <div style="font-size:11px;color:rgba(245,240,232,.38);margin-top:4px;">Strength-focused teams</div>
+          </div>
+          <div style="border-radius:20px;padding:28px 20px;background:rgba(245,240,232,.06);border:1.5px solid rgba(245,240,232,.14);text-align:center;">
+            <div style="font-family:var(--font-heading);font-size:clamp(40px,6vw,68px);color:var(--color-accent);letter-spacing:-2px;line-height:1;">6×</div>
+            <div style="font-size:14px;font-weight:700;color:rgba(245,240,232,.8);margin-top:10px;">Higher Engagement</div>
+            <div style="font-size:11px;color:rgba(245,240,232,.38);margin-top:4px;">Strength-focused teams</div>
+          </div>
+        </div>
+        <!-- Arrow transition -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;">
+          <div style="padding:10px 24px;border-radius:var(--radius-pill);border:1.5px solid rgba(245,240,232,.2);background:rgba(245,240,232,.05);font-size:14px;font-weight:600;color:rgba(245,240,232,.55);">Damage Control</div>
+          <div style="font-size:22px;color:var(--color-accent);">→</div>
+          <div style="padding:10px 24px;border-radius:var(--radius-pill);border:1.5px solid var(--color-accent);background:rgba(212,101,42,.15);font-size:14px;font-weight:700;color:var(--color-accent);">Asset Management</div>
+        </div>
+        <p style="font-size:15px;color:rgba(245,240,232,.55);max-width:560px;margin:0 auto;">Stop fixing what's broken. Start scaling what's exceptional.<br><em style="color:rgba(245,240,232,.38);">Don't water the rocks. Water the flowers.</em></p>
+      </div>
+    </div>
+
+    <!-- S5 NEUROBIOLOGIE (original — now S7 in new numbering) -->
+    <div class="slide sl-dark" data-ch="1">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:44px;">
+          <div>
+            <div class="lbl lbl-d">Neurobiologie</div>
+            <h2 class="h2 h2-l" style="margin-bottom:18px;">Stärken sind<br>neuronale <em>Autobahnen</em></h2>
+            <p class="body body-d" style="margin-bottom:18px;">Das Gehirn führt bis zum 15. Lebensjahr ein "Synaptic Pruning" durch. Häufig genutzte Verbindungen werden zu mehrspurigen Autobahnen. Ungenutzte verfallen.</p>
+            <div class="ac-card" style="margin-bottom:12px;">
+              <div style="font-size:11px;font-weight:700;color:var(--color-accent);margin-bottom:5px;">⚡ Stärken nutzen = Autobahn</div>
+              <div style="font-size:11px;color:rgba(245,240,232,.48);line-height:1.6;">Schnell · fehlerfrei · gibt Energie · nachhaltiger Output</div>
+            </div>
+            <div style="padding:13px 16px;border-radius:11px;background:rgba(220,53,69,.06);border:1px solid rgba(220,53,69,.17);">
+              <div style="font-size:11px;font-weight:700;color:#d95555;margin-bottom:5px;">🧱 Schwächen managen = Feldweg</div>
+              <div style="font-size:11px;color:rgba(245,240,232,.48);line-height:1.6;">Kostet massiv Kraft · führt zu Erschöpfung · wenig Fortschritt</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 260 280" width="230" height="248" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="bg1" cx="50%" cy="45%" r="50%">
+                  <stop offset="0%" stop-color="rgba(212,101,42,0.14)"/>
+                  <stop offset="100%" stop-color="rgba(26,23,20,0)"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="130" cy="132" rx="105" ry="98" fill="url(#bg1)" stroke="rgba(245,240,232,0.07)" stroke-width="1.5"/>
+              <path d="M52 105 Q92 86 130 105 Q168 124 208 105" fill="none" stroke="rgba(245,240,232,0.07)" stroke-width="1.5"/>
+              <path d="M48 138 Q88 118 130 138 Q172 158 212 138" fill="none" stroke="rgba(245,240,232,0.07)" stroke-width="1.5"/>
+              <path d="M56 170 Q96 152 130 170 Q164 188 204 168" fill="none" stroke="rgba(245,240,232,0.07)" stroke-width="1.5"/>
+              <!-- weak -->
+              <line x1="74" y1="94" x2="150" y2="188" stroke="rgba(245,240,232,0.07)" stroke-width="1"/>
+              <line x1="186" y1="90" x2="102" y2="184" stroke="rgba(245,240,232,0.07)" stroke-width="1"/>
+              <line x1="94" y1="76" x2="188" y2="168" stroke="rgba(245,240,232,0.06)" stroke-width="1"/>
+              <!-- highways -->
+              <line x1="68" y1="124" x2="192" y2="147" stroke="#D4652A" stroke-width="3.5" stroke-linecap="round" opacity="0.8"/>
+              <line x1="82" y1="162" x2="182" y2="114" stroke="#C49A2A" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+              <line x1="102" y1="86" x2="164" y2="184" stroke="#D4652A" stroke-width="2" stroke-linecap="round" opacity="0.52"/>
+              <!-- dots -->
+              <circle cx="68" cy="124" r="5" fill="#D4652A" opacity=".9"/>
+              <circle cx="130" cy="135" r="5" fill="#D4652A" opacity=".9"/>
+              <circle cx="192" cy="147" r="5" fill="#D4652A" opacity=".9"/>
+              <circle cx="82" cy="162" r="4" fill="#C49A2A" opacity=".8"/>
+              <circle cx="134" cy="137" r="4" fill="#C49A2A" opacity=".8"/>
+              <circle cx="182" cy="114" r="4" fill="#C49A2A" opacity=".8"/>
+              <circle cx="74" cy="94" r="3" fill="rgba(245,240,232,0.18)"/>
+              <circle cx="150" cy="188" r="3" fill="rgba(245,240,232,0.18)"/>
+              <circle cx="186" cy="90" r="3" fill="rgba(245,240,232,0.18)"/>
+              <circle cx="102" cy="184" r="3" fill="rgba(245,240,232,0.18)"/>
+              <text x="130" y="248" text-anchor="middle" font-size="9" fill="rgba(212,101,42,0.65)" font-family="Outfit" font-weight="700">— Neuronale Autobahnen (Stärken)</text>
+              <text x="130" y="261" text-anchor="middle" font-size="8" fill="rgba(245,240,232,0.18)" font-family="Outfit">— Untergenutzte Verbindungen</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S6 STÄRKEN-HEBEL -->
+    <div class="slide sl-dark" data-ch="1">
+      <div class="inner inner-c">
+        <div class="lbl lbl-d">Prof. Dr. Creusen &amp; Gallup</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 30px;max-width:560px;">Stärkenorientierung &amp;<br><em>Mitarbeiterbindung</em></h2>
+        <div class="hebel-bar-group" style="max-width:740px;margin:0 auto;">
+          <div class="hebel-row">
+            <div class="hebel-row-label">Ignoriert</div>
+            <div class="hebel-track"><div class="hebel-fill" style="width:34%;background:rgba(245,240,232,0.22);">22%</div></div>
+          </div>
+          <div class="hebel-row">
+            <div class="hebel-row-label" style="color:rgba(220,53,69,.78);">⚠ Auf Schwächen<br>fokussiert</div>
+            <div class="hebel-track"><div class="hebel-fill" style="width:61%;background:linear-gradient(90deg,#962020,#d95555);">40%</div></div>
+          </div>
+          <div class="hebel-row">
+            <div class="hebel-row-label" style="color:rgba(40,167,69,.78);">✓ Auf Stärken<br>fokussiert</div>
+            <div class="hebel-track"><div class="hebel-fill" style="width:4%;background:linear-gradient(90deg,#1a8c3a,#4aad5f);min-width:50px;font-size:18px;padding-left:6px;">1%</div></div>
+          </div>
+        </div>
+        <p class="body body-d" style="margin-top:24px;max-width:580px;margin-left:auto;margin-right:auto;text-align:center;">Wahrscheinlichkeit der <strong style="color:var(--color-text-on-dark);">emotionalen Distanzierung</strong> (innere Kündigung) je nach Führungsfokus</p>
+        <div style="margin-top:12px;font-size:9px;color:rgba(245,240,232,.16);text-align:center;">Quelle: Prof. Dr. Utho Creusen / Gallup Engagement-Forschung</div>
+      </div>
+    </div>
+
+    <!-- S7 SCHUBLADEN-FALLE -->
+    <div class="slide sl-dark" data-ch="1">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:44px;">
+          <!-- LEFT -->
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Die Lücke</div>
+            <h2 class="h2 h2-l" style="margin-bottom:22px;font-size:clamp(26px,3.8vw,48px);">Ihr habt den Test gemacht.<br><em>Und jetzt?</em></h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.72);line-height:1.75;margin-bottom:22px;">Millionen Menschen haben CliftonStrengths &amp; Co. absolviert. Es gibt einen kurzen "Aha-Moment" — und dann landet der Report in der Schublade. Wissen allein ändert nichts an Reibungsverlusten.</p>
+            <div style="padding:20px 24px;border-radius:16px;border:1.5px solid rgba(212,101,42,.35);background:rgba(212,101,42,.1);">
+              <div style="font-size:12px;font-weight:700;color:var(--color-accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Der entscheidende Sprung:</div>
+              <div style="font-size:15px;color:rgba(245,240,232,.85);line-height:1.7;">Von <strong style="color:#fff;">"Ich kenne meine Stärke"</strong><br>zu <strong style="color:var(--color-accent);">"Wir verschalten unsere Stärken als Team."</strong></div>
+            </div>
+          </div>
+          <!-- RIGHT: gap flow -->
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;border:1.5px solid rgba(245,240,232,.14);background:rgba(245,240,232,.06);">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,101,42,.2);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📋</div>
+              <div><div style="font-size:15px;font-weight:600;color:rgba(245,240,232,.85);">Assessment absolviert</div><div style="font-size:12px;color:rgba(245,240,232,.4);margin-top:2px;">CliftonStrengths · MBTI · VIA</div></div>
+            </div>
+            <div style="text-align:center;font-size:22px;color:rgba(245,240,232,.2);">↓</div>
+            <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;border:1.5px solid rgba(245,240,232,.14);background:rgba(245,240,232,.06);">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,101,42,.2);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✨</div>
+              <div><div style="font-size:15px;font-weight:600;color:rgba(245,240,232,.85);">"Aha-Moment" beim Lesen</div><div style="font-size:12px;color:rgba(245,240,232,.4);margin-top:2px;">Report lesen, nicken, begeistert sein</div></div>
+            </div>
+            <div style="text-align:center;font-size:22px;color:rgba(245,240,232,.2);">↓</div>
+            <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;border:2px dashed rgba(220,53,69,.5);background:rgba(220,53,69,.08);">
+              <div style="font-size:22px;flex-shrink:0;">🗄️</div>
+              <div style="font-size:15px;font-weight:700;color:#ff7070;">Bericht landet in der Schublade</div>
+            </div>
+            <div style="padding:12px 16px;border-radius:10px;background:rgba(220,53,69,.06);border:1px dashed rgba(220,53,69,.25);text-align:center;">
+              <div style="font-size:13px;color:rgba(220,53,69,.75);">Gleiche Meetings · Gleiche Reibung · Gleiche Blindspots</div>
+            </div>
+            <div style="text-align:center;font-size:22px;color:rgba(245,240,232,.2);">↓</div>
+            <div style="padding:20px;border-radius:14px;text-align:center;background:rgba(212,101,42,.15);border:2px solid rgba(212,101,42,.4);">
+              <div style="font-size:22px;margin-bottom:8px;">🧭</div>
+              <div style="font-size:15px;font-weight:700;color:var(--color-text-on-dark);">Stärken als Team verschalten</div>
+              <div style="font-size:12px;color:rgba(245,240,232,.45);margin-top:4px;">The Strength Hack schließt diese Lücke</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TEIL 3: PERSÖNLICHE INVENTUR ══ -->
+
+    <!-- S7a DIE 4 TALENT CLUSTER (CliftonStrengths) -->
+    <div class="slide sl-dark" data-ch="2">
+      <div class="inner inner-c">
+        <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">CliftonStrengths · Teil 3</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 28px;max-width:680px;font-size:clamp(24px,3.6vw,46px);">Die Matrix der <em>Zusammenarbeit</em></h2>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:840px;margin:0 auto 20px;">
+          <!-- Durchführung -->
+          <div style="border-radius:20px;padding:26px 24px;border:2px solid rgba(212,101,42,.5);background:rgba(212,101,42,.1);text-align:left;">
+            <div style="font-size:32px;margin-bottom:10px;">⚙️</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:6px;">Durchführung</div>
+            <div style="font-family:var(--font-heading);font-size:22px;color:var(--color-text-on-dark);margin-bottom:8px;">Der Motor</div>
+            <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Achiever · Arranger · Belief · Consistency · Deliberative · Discipline · Focus · Responsibility · Restorative</div>
+          </div>
+          <!-- Einflussnahme -->
+          <div style="border-radius:20px;padding:26px 24px;border:2px solid rgba(196,154,42,.5);background:rgba(196,154,42,.1);text-align:left;">
+            <div style="font-size:32px;margin-bottom:10px;">📣</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-warm-gold);margin-bottom:6px;">Einflussnahme</div>
+            <div style="font-family:var(--font-heading);font-size:22px;color:var(--color-text-on-dark);margin-bottom:8px;">Das Sprachrohr</div>
+            <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Activator · Command · Communication · Competition · Maximizer · Self-Assurance · Significance · Woo</div>
+          </div>
+          <!-- Beziehungsaufbau -->
+          <div style="border-radius:20px;padding:26px 24px;border:2px solid rgba(74,173,95,.5);background:rgba(40,167,69,.1);text-align:left;">
+            <div style="font-size:32px;margin-bottom:10px;">🤝</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6dd98a;margin-bottom:6px;">Beziehungsaufbau</div>
+            <div style="font-family:var(--font-heading);font-size:22px;color:var(--color-text-on-dark);margin-bottom:8px;">Der Klebstoff</div>
+            <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Adaptability · Developer · Empathy · Harmony · Includer · Individualization · Positivity · Relator</div>
+          </div>
+          <!-- Strategisches Denken -->
+          <div style="border-radius:20px;padding:26px 24px;border:2px solid rgba(100,149,237,.5);background:rgba(42,100,196,.1);text-align:left;">
+            <div style="font-size:32px;margin-bottom:10px;">🧭</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6a9fd8;margin-bottom:6px;">Strategisches Denken</div>
+            <div style="font-family:var(--font-heading);font-size:22px;color:var(--color-text-on-dark);margin-bottom:8px;">Das Navi</div>
+            <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Analytical · Context · Futuristic · Ideation · Input · Intellection · Learner · Strategic</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:rgba(245,240,232,.4);max-width:580px;margin:0 auto;">Kein Alleskönner ist das Ziel. Ein Spitzenteam braucht <strong style="color:rgba(245,240,232,.7);">alle vier Domänen</strong> — gut vernetzt.</p>
+      </div>
+    </div>
+
+    <!-- S7b THE 70% ENERGY AUDIT -->
+    <div class="slide sl-dark" data-ch="2">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:44px;">
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">The 70% Energy Audit</div>
+            <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(26px,3.8vw,48px);">Your tasks. <em>Mapped.</em></h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.68);line-height:1.75;margin-bottom:24px;">Nicht alles, was Sie fachlich gut können, gibt Ihnen auch Energie. Die roten Aufgaben, die Sie um 15 Uhr den Job verfluchen lassen, sind direkte Konflikte mit Ihrem Stärkenprofil.</p>
+            <div style="padding:18px 22px;border-radius:14px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);">
+              <div style="font-size:12px;font-weight:700;color:var(--color-accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Übung: Energie-Inventur</div>
+              <div style="font-size:13px;color:rgba(245,240,232,.65);line-height:1.65;">Schreiben Sie Ihre 5 häufigsten Aufgaben auf. Ordnen Sie jede einer Farbe zu. Wo steckt Ihr Ferrari im Matsch?</div>
+            </div>
+          </div>
+          <!-- Traffic light cards -->
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:16px;border:2px solid rgba(74,173,95,.5);background:rgba(40,167,69,.1);">
+              <div style="width:44px;height:44px;border-radius:50%;background:#4aad5f;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px rgba(74,173,95,.4);">
+                <div style="width:18px;height:18px;border-radius:50%;background:#fff;opacity:.9;"></div>
+              </div>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:#6dd98a;margin-bottom:3px;">Green — Flow State</div>
+                <div style="font-size:12px;color:rgba(245,240,232,.6);line-height:1.5;">Tasks that energize you. Aligned with your natural strengths. Time flies.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:16px;border:2px solid rgba(196,154,42,.45);background:rgba(196,154,42,.1);">
+              <div style="width:44px;height:44px;border-radius:50%;background:#c49a2a;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px rgba(196,154,42,.35);">
+                <div style="width:18px;height:18px;border-radius:50%;background:#fff;opacity:.9;"></div>
+              </div>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:#e8c860;margin-bottom:3px;">Yellow — Routine</div>
+                <div style="font-size:12px;color:rgba(245,240,232,.6);line-height:1.5;">Neutral tasks. Neither draining nor energizing. Manageable, but not optimal.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:16px;border:2px solid rgba(220,53,69,.5);background:rgba(220,53,69,.1);">
+              <div style="width:44px;height:44px;border-radius:50%;background:#d95555;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 16px rgba(220,53,69,.4);">
+                <div style="width:18px;height:18px;border-radius:50%;background:#fff;opacity:.9;"></div>
+              </div>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:#ff8080;margin-bottom:3px;">Red — Energy Drain</div>
+                <div style="font-size:12px;color:rgba(245,240,232,.6);line-height:1.5;">Tasks that exhaust you. These are the dirt roads. <strong style="color:rgba(245,240,232,.8);">Your biggest opportunity.</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7c THE JOB CRAFTING FIX -->
+    <div class="slide sl-dark" data-ch="2">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:48px;">
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">The Job Crafting Fix</div>
+            <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.6vw,46px);">Three levers to reclaim<br><em>30% of your week</em></h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.68);line-height:1.75;margin-bottom:24px;">Führung durch Matching heißt Job Crafting. Wir modellieren die Arbeit um unsere Talente herum — nicht umgekehrt.</p>
+            <div style="padding:18px 22px;border-radius:16px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);">
+              <div style="font-family:var(--font-heading);font-style:italic;font-size:18px;color:var(--color-text-on-dark);line-height:1.5;">"Your dirt road is someone else's highway."</div>
+            </div>
+          </div>
+          <!-- 3 levers -->
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:flex-start;gap:16px;padding:20px 22px;border-radius:16px;border:1.5px solid rgba(212,101,42,.35);background:rgba(212,101,42,.08);">
+              <div style="width:48px;height:48px;border-radius:14px;background:rgba(212,101,42,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">⚙️</div>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--color-text-on-dark);margin-bottom:4px;">Task Crafting</div>
+                <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Automate, eliminate, reduce scope. Befreie dich von Red-Tasks, die KI oder ein Kollege besser erledigt.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:16px;padding:20px 22px;border-radius:16px;border:1.5px solid rgba(74,173,95,.35);background:rgba(40,167,69,.08);">
+              <div style="width:48px;height:48px;border-radius:14px;background:rgba(74,173,95,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🤝</div>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--color-text-on-dark);margin-bottom:4px;">Relational Crafting</div>
+                <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Delegate to a teammate's highway. Deine Dirt Road ist die Autobahn deines Kollegen.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:16px;padding:20px 22px;border-radius:16px;border:1.5px solid rgba(100,149,237,.35);background:rgba(42,100,196,.08);">
+              <div style="width:48px;height:48px;border-radius:14px;background:rgba(42,100,196,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🧠</div>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--color-text-on-dark);margin-bottom:4px;">Cognitive Crafting</div>
+                <div style="font-size:13px;color:rgba(245,240,232,.6);line-height:1.6;">Reframe the meaning of the task. Wie passt diese Aufgabe zu deinen Werten und Stärken?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7d INTERAKTIVE ÜBUNG (Murmelgruppen) -->
+    <div class="slide sl-dark" data-ch="2">
+      <div class="inner inner-c">
+        <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Interaktive Übung · 10 Minuten</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 28px;max-width:680px;font-size:clamp(26px,3.8vw,50px);">Jetzt <em>direkt anwenden</em></h2>
+        <!-- Timer visual -->
+        <div style="width:120px;height:120px;border-radius:50%;background:rgba(212,101,42,.12);border:3px solid rgba(212,101,42,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 32px;box-shadow:0 0 32px rgba(212,101,42,.2);">
+          <div>
+            <div style="font-family:var(--font-heading);font-size:32px;color:var(--color-accent);line-height:1;">10</div>
+            <div style="font-size:10px;font-weight:700;color:rgba(212,101,42,.7);letter-spacing:2px;text-transform:uppercase;">Min</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:800px;margin:0 auto;">
+          <div style="padding:24px 28px;border-radius:18px;border:2px solid rgba(212,101,42,.4);background:rgba(212,101,42,.1);text-align:left;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-accent);margin-bottom:10px;">Frage 1</div>
+            <div style="font-family:var(--font-heading);font-size:19px;color:var(--color-text-on-dark);line-height:1.4;margin-bottom:10px;">Was ist Ihre akuteste rote "Dirt Road"-Aufgabe?</div>
+            <div style="font-size:13px;color:rgba(245,240,232,.5);line-height:1.6;">Die Aufgabe, die Sie regelmäßig um 15 Uhr den Job verfluchen lässt.</div>
+          </div>
+          <div style="padding:24px 28px;border-radius:18px;border:2px solid rgba(74,173,95,.4);background:rgba(40,167,69,.1);text-align:left;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6dd98a;margin-bottom:10px;">Frage 2</div>
+            <div style="font-family:var(--font-heading);font-size:19px;color:var(--color-text-on-dark);line-height:1.4;margin-bottom:10px;">Wer in Ihrem Team hat die "Highway"-Stärken dafür?</div>
+            <div style="font-size:13px;color:rgba(245,240,232,.5);line-height:1.6;">Für wen wäre exakt diese Aufgabe ein Green-Flow-State?</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:rgba(245,240,232,.35);margin-top:24px;">Tauschen Sie sich 5 Minuten mit Ihrem Nachbarn aus — dann kurze Rückmeldung ins Plenum.</p>
+      </div>
+    </div>
+
+    <!-- ══ TEIL 4 DEEP-DIVE: TEAM-DYNAMIK ══ -->
+    <div class="slide sl-dark" data-ch="2">
+      <div class="inner inner-c">
+        <div class="lbl" style="color:var(--color-accent);font-size:12px;letter-spacing:3px;">Framework</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 36px;max-width:640px;font-size:clamp(26px,3.8vw,48px);">Der Tuckman-Accelerator:<br><em>Storming überspringen</em></h2>
+        <div style="max-width:860px;margin:0 auto;">
+          <!-- 4 Phase cards with strong, distinct styling -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;">
+            <!-- connector line -->
+            <div style="position:absolute;top:32px;left:calc(12.5%+7px);right:calc(12.5%+7px);height:2px;background:rgba(245,240,232,.12);z-index:0;"></div>
+
+            <!-- Forming -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:1.5px solid rgba(245,240,232,.25);background:rgba(245,240,232,.08);position:relative;z-index:1;">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(245,240,232,.18);border:2px solid rgba(245,240,232,.4);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:rgba(245,240,232,.9);margin:0 auto 14px;">1</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#F5F0E8;margin-bottom:8px;">Forming</div>
+              <div style="font-size:12px;color:rgba(245,240,232,.6);line-height:1.5;">Erste Orientierung<br>Beschnuppern</div>
+            </div>
+
+            <!-- Storming — RED ALERT -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:2px solid rgba(220,53,69,.8);background:rgba(220,53,69,.18);position:relative;z-index:1;box-shadow:0 0 28px rgba(220,53,69,.2);">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(220,53,69,.5);border:2px solid #ff7070;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 14px;">2</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#ff8080;margin-bottom:8px;">Storming</div>
+              <div style="font-size:12px;color:rgba(255,128,128,.8);line-height:1.5;margin-bottom:12px;">Konflikte<br>Stilunterschiede</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-pill);background:rgba(220,53,69,.4);border:1px solid rgba(255,112,112,.6);font-size:9px;font-weight:700;color:#ffaaaa;letter-spacing:1px;text-transform:uppercase;">⚠ Stuck here</div>
+            </div>
+
+            <!-- Norming -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:1.5px solid rgba(196,154,42,.4);background:rgba(196,154,42,.1);position:relative;z-index:1;">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(196,154,42,.3);border:2px solid rgba(196,154,42,.6);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#e8c860;margin:0 auto 14px;">3</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#e8c860;margin-bottom:8px;">Norming</div>
+              <div style="font-size:12px;color:rgba(232,200,96,.7);line-height:1.5;">Gemeinsame<br>Regeln entstehen</div>
+            </div>
+
+            <!-- Performing — GREEN SUCCESS -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:2px solid rgba(74,173,95,.6);background:rgba(40,167,69,.15);position:relative;z-index:1;box-shadow:0 0 24px rgba(40,167,69,.15);">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(40,167,69,.4);border:2px solid #6dd98a;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 14px;">4</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#6dd98a;margin-bottom:8px;">Performing</div>
+              <div style="font-size:12px;color:rgba(109,217,138,.75);line-height:1.5;">Flow<br>Selbstorganisation</div>
+            </div>
+          </div>
+
+          <!-- Accelerator arc -->
+          <svg viewBox="0 0 860 48" fill="none" style="width:100%;height:48px;overflow:visible;margin-top:6px;">
+            <path d="M107 9 Q430 48 753 9" stroke="#D4652A" stroke-width="2.5" stroke-dasharray="7 5" opacity=".65"/>
+            <polygon points="748,3 764,9 748,15" fill="#D4652A" opacity=".75"/>
+            <text x="430" y="42" text-anchor="middle" fill="#D4652A" font-family="Outfit" font-size="12" font-weight="700" opacity=".8" letter-spacing="1">THE STRENGTH HACK · ACCELERATOR</text>
+          </svg>
+        </div>
+        <p style="text-align:center;max-width:560px;margin:20px auto 0;font-size:15px;color:rgba(245,240,232,.6);line-height:1.7;">Reibung entsteht nicht aus böser Absicht — sondern aus unterschiedlichen Stilen. Eine <strong style="color:var(--color-text-on-dark);">neutrale Sprache</strong> entpersonalisiert Konflikte, bevor sie eskalieren.</p>
+      </div>
+    </div>
+
+    <!-- S8 TUCKMAN -->
+    <div class="slide sl-dark" data-ch="3">
+      <div class="inner inner-c">
+        <div class="lbl" style="color:var(--color-accent);font-size:12px;letter-spacing:3px;">Framework · Teil 4</div>
+        <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 36px;max-width:640px;font-size:clamp(26px,3.8vw,48px);">Der Tuckman-Accelerator:<br><em>Storming überspringen</em></h2>
+        <div style="max-width:860px;margin:0 auto;">
+          <!-- 4 Phase cards with strong, distinct styling -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;">
+            <!-- connector line -->
+            <div style="position:absolute;top:32px;left:calc(12.5%+7px);right:calc(12.5%+7px);height:2px;background:rgba(245,240,232,.12);z-index:0;"></div>
+
+            <!-- Forming -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:1.5px solid rgba(245,240,232,.25);background:rgba(245,240,232,.08);position:relative;z-index:1;">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(245,240,232,.18);border:2px solid rgba(245,240,232,.4);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:rgba(245,240,232,.9);margin:0 auto 14px;">1</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#F5F0E8;margin-bottom:8px;">Forming</div>
+              <div style="font-size:12px;color:rgba(245,240,232,.6);line-height:1.5;">Erste Orientierung<br>Beschnuppern</div>
+            </div>
+
+            <!-- Storming — RED ALERT -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:2px solid rgba(220,53,69,.8);background:rgba(220,53,69,.18);position:relative;z-index:1;box-shadow:0 0 28px rgba(220,53,69,.2);">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(220,53,69,.5);border:2px solid #ff7070;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 14px;">2</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#ff8080;margin-bottom:8px;">Storming</div>
+              <div style="font-size:12px;color:rgba(255,128,128,.8);line-height:1.5;margin-bottom:12px;">Konflikte<br>Stilunterschiede</div>
+              <div style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-pill);background:rgba(220,53,69,.4);border:1px solid rgba(255,112,112,.6);font-size:9px;font-weight:700;color:#ffaaaa;letter-spacing:1px;text-transform:uppercase;">⚠ Stuck here</div>
+            </div>
+
+            <!-- Norming -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:1.5px solid rgba(196,154,42,.4);background:rgba(196,154,42,.1);position:relative;z-index:1;">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(196,154,42,.3);border:2px solid rgba(196,154,42,.6);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#e8c860;margin:0 auto 14px;">3</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#e8c860;margin-bottom:8px;">Norming</div>
+              <div style="font-size:12px;color:rgba(232,200,96,.7);line-height:1.5;">Gemeinsame<br>Regeln entstehen</div>
+            </div>
+
+            <!-- Performing — GREEN SUCCESS -->
+            <div style="border-radius:18px;padding:24px 16px;text-align:center;border:2px solid rgba(74,173,95,.6);background:rgba(40,167,69,.15);position:relative;z-index:1;box-shadow:0 0 24px rgba(40,167,69,.15);">
+              <div style="width:40px;height:40px;border-radius:50%;background:rgba(40,167,69,.4);border:2px solid #6dd98a;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin:0 auto 14px;">4</div>
+              <div style="font-family:var(--font-heading);font-size:20px;color:#6dd98a;margin-bottom:8px;">Performing</div>
+              <div style="font-size:12px;color:rgba(109,217,138,.75);line-height:1.5;">Flow<br>Selbstorganisation</div>
+            </div>
+          </div>
+
+          <!-- Accelerator arc -->
+          <svg viewBox="0 0 860 48" fill="none" style="width:100%;height:48px;overflow:visible;margin-top:6px;">
+            <path d="M107 9 Q430 48 753 9" stroke="#D4652A" stroke-width="2.5" stroke-dasharray="7 5" opacity=".65"/>
+            <polygon points="748,3 764,9 748,15" fill="#D4652A" opacity=".75"/>
+            <text x="430" y="42" text-anchor="middle" fill="#D4652A" font-family="Outfit" font-size="12" font-weight="700" opacity=".8" letter-spacing="1">THE STRENGTH HACK · ACCELERATOR</text>
+          </svg>
+        </div>
+        <p style="text-align:center;max-width:560px;margin:20px auto 0;font-size:15px;color:rgba(245,240,232,.6);line-height:1.7;">Reibung entsteht nicht aus böser Absicht — sondern aus unterschiedlichen Stilen. Eine <strong style="color:var(--color-text-on-dark);">neutrale Sprache</strong> entpersonalisiert Konflikte, bevor sie eskalieren.</p>
+      </div>
+    </div>
+
+    <!-- S8a WARUM STAR-ENSEMBLES SCHEITERN (TMS) -->
+    <div class="slide sl-dark" data-ch="3">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:48px;">
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Transactive Memory System</div>
+            <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.6vw,46px);">Warum Star-Ensembles<br><em>oft scheitern</em></h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.68);line-height:1.75;margin-bottom:22px;">In einem perfekten Team muss nicht jeder alles wissen. Man muss nur <strong style="color:var(--color-text-on-dark);">blind wissen, wer bei welchem Problem das Steuer übernimmt</strong> — das ist das Transactive Memory System.</p>
+            <div style="padding:18px 22px;border-radius:14px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);margin-bottom:16px;">
+              <div style="font-size:12px;font-weight:700;color:var(--color-accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">TMS in der Praxis</div>
+              <div style="font-size:13px;color:rgba(245,240,232,.65);line-height:1.65;">Das Team weiß implizit: KI-Architektur → Marc. Kundengespräch → Emma. Prozess-Chaos → Lisa. Keine Abstimmungsrunde nötig.</div>
+            </div>
+            <div style="padding:14px 18px;border-radius:12px;background:rgba(220,53,69,.08);border:1px solid rgba(220,53,69,.2);">
+              <div style="font-size:13px;color:#ff8080;">⚠ Ohne TMS: Alle fragen alle. Flaschenhals entsteht. Senior wird überlastet.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="text-align:center;padding:20px;border-radius:18px;background:rgba(245,240,232,.04);border:1px solid rgba(245,240,232,.1);">
+              <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,.3);margin-bottom:16px;">Wer weiß was? — Das digitale TMS</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+                <div style="padding:16px 10px;border-radius:12px;background:rgba(212,101,42,.15);border:1.5px solid rgba(212,101,42,.35);text-align:center;">
+                  <div style="font-size:26px;margin-bottom:8px;">🧭</div>
+                  <div style="font-size:12px;font-weight:700;color:var(--color-accent);">Strategie</div>
+                  <div style="font-size:11px;color:rgba(245,240,232,.4);margin-top:4px;">Emma K.</div>
+                </div>
+                <div style="padding:16px 10px;border-radius:12px;background:rgba(42,100,196,.15);border:1.5px solid rgba(42,100,196,.35);text-align:center;">
+                  <div style="font-size:26px;margin-bottom:8px;">🔬</div>
+                  <div style="font-size:12px;font-weight:700;color:#6a9fd8;">Analytik</div>
+                  <div style="font-size:11px;color:rgba(245,240,232,.4);margin-top:4px;">Marc S.</div>
+                </div>
+                <div style="padding:16px 10px;border-radius:12px;background:rgba(74,173,95,.15);border:1.5px solid rgba(74,173,95,.35);text-align:center;">
+                  <div style="font-size:26px;margin-bottom:8px;">🤝</div>
+                  <div style="font-size:12px;font-weight:700;color:#6dd98a;">Beziehung</div>
+                  <div style="font-size:11px;color:rgba(245,240,232,.4);margin-top:4px;">Lisa T.</div>
+                </div>
+              </div>
+              <div style="margin-top:14px;padding:12px;border-radius:10px;background:rgba(212,101,42,.08);border:1px solid rgba(212,101,42,.2);">
+                <div style="font-size:13px;color:var(--color-accent);font-weight:600;">= Verteiltes Teamgedächtnis · Kein Single Point of Failure</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8b APOLLO 13 -->
+    <div class="slide sl-dark" data-ch="3">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:48px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+            <div style="width:100%;border-radius:20px;background:linear-gradient(135deg,rgba(30,25,15,.95),rgba(20,18,12,.98));border:1.5px solid rgba(245,240,232,.1);padding:32px;text-align:center;position:relative;overflow:hidden;">
+              <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,rgba(212,101,42,.1),transparent 60%);"></div>
+              <div style="font-size:60px;margin-bottom:14px;position:relative;z-index:1;">🚀</div>
+              <div style="font-family:var(--font-heading);font-size:30px;color:var(--color-text-on-dark);margin-bottom:4px;position:relative;z-index:1;">Apollo 13</div>
+              <div style="font-size:11px;color:rgba(245,240,232,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;position:relative;z-index:1;">April 1970 · Mission Control Houston</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1;">
+                <div style="padding:12px;border-radius:11px;background:rgba(212,101,42,.14);border:1px solid rgba(212,101,42,.3);">
+                  <div style="font-size:10px;font-weight:700;color:var(--color-accent);letter-spacing:1.5px;">STRATEGIE</div>
+                  <div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">Navigatoren</div>
+                </div>
+                <div style="padding:12px;border-radius:11px;background:rgba(42,100,196,.14);border:1px solid rgba(42,100,196,.3);">
+                  <div style="font-size:10px;font-weight:700;color:#6a9fd8;letter-spacing:1.5px;">ANALYTIK</div>
+                  <div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">Ingenieure</div>
+                </div>
+                <div style="padding:12px;border-radius:11px;background:rgba(196,154,42,.14);border:1px solid rgba(196,154,42,.3);">
+                  <div style="font-size:10px;font-weight:700;color:#e8c860;letter-spacing:1.5px;">INNOVATION</div>
+                  <div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">Problemlöser</div>
+                </div>
+                <div style="padding:12px;border-radius:11px;background:rgba(74,173,95,.14);border:1px solid rgba(74,173,95,.3);">
+                  <div style="font-size:10px;font-weight:700;color:#6dd98a;letter-spacing:1.5px;">STABILISIERUNG</div>
+                  <div style="font-size:13px;color:rgba(245,240,232,.75);margin-top:4px;">Kommunikation</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">High Reliability Organizations</div>
+            <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.5vw,44px);">Der perfekte<br><em>Stärken-Mix</em><br>unter absolutem Stress</h2>
+            <p style="font-size:15px;color:rgba(245,240,232,.68);line-height:1.75;margin-bottom:20px;">Alle sprachen die gleiche faktenbasierte Sprache — aber in der Krise brauchte es radikal <strong style="color:var(--color-text-on-dark);">komplementäre Detailstärken</strong>. Erst das TMS rettete das Raumschiff.</p>
+            <div style="padding:18px 22px;border-radius:14px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);margin-bottom:14px;">
+              <div style="font-family:var(--font-heading);font-style:italic;font-size:18px;color:var(--color-text-on-dark);line-height:1.5;">"Failure is not an option."<br><span style="font-size:13px;color:rgba(245,240,232,.4);font-style:normal;">— Gene Kranz, Flight Director</span></div>
+            </div>
+            <p style="font-size:14px;color:rgba(245,240,232,.5);line-height:1.7;">Einer allein hätte das Raumschiff niemals zurückgebracht. Erst die Kombination aller vier Stärken-Domänen machte es möglich.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S9a KOMPASS DEEP-DIVE: IMPULSIV vs BEDACHT -->
+    <div class="slide sl-dark" data-ch="3">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:48px;">
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Kompass Deep-Dive · Dimension: Tatkraft</div>
+            <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.6vw,46px);"><em>Impulsiv</em> vs.<br>Bedacht</h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.68);line-height:1.75;margin-bottom:20px;">Einer der häufigsten Management-Konflikte — und er ist fast nie persönlich gemeint.</p>
+            <div style="padding:18px 22px;border-radius:14px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);">
+              <div style="font-size:12px;font-weight:700;color:var(--color-accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Die Wahrheit:</div>
+              <div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.7;">Keiner hat recht — <strong style="color:#fff;">beide haben recht.</strong> Der Impulsive sichert das Marktfenster. Der Bedachte sichert den Ruf des Unternehmens. Wir brauchen beide.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="padding:24px;border-radius:18px;border:2px solid rgba(212,101,42,.5);background:rgba(212,101,42,.1);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                <div style="font-size:32px;">🚀</div>
+                <div><div style="font-size:16px;font-weight:700;color:var(--color-accent);">Der Impulsive</div><div style="font-size:11px;color:rgba(245,240,232,.4);">Hohe Tatkraft / Spontaneous</div></div>
+              </div>
+              <div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;font-style:italic;">"Launch it! Done is better than perfect. Wir lernen aus dem Feedback der echten Nutzer."</div>
+              <div style="margin-top:12px;font-size:12px;color:rgba(245,240,232,.4);">Sichert: <strong style="color:rgba(245,240,232,.7);">Geschwindigkeit · Marktfenster · Momentum</strong></div>
+            </div>
+            <div style="padding:24px;border-radius:18px;border:2px solid rgba(42,100,196,.5);background:rgba(42,100,196,.1);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                <div style="font-size:32px;">🔍</div>
+                <div><div style="font-size:16px;font-weight:700;color:#6a9fd8;">Der Bedachte</div><div style="font-size:11px;color:rgba(245,240,232,.4);">Hohe Analytik / Deliberate</div></div>
+              </div>
+              <div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;font-style:italic;">"Wir haben noch 3 ungetestete Risiken. Ich brauche weitere Daten, bevor wir uns festlegen."</div>
+              <div style="margin-top:12px;font-size:12px;color:rgba(245,240,232,.4);">Sichert: <strong style="color:rgba(245,240,232,.7);">Qualität · Reputation · Risikominimierung</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S9b KOMPASS DEEP-DIVE: ORGANISIERT vs AGIL -->
+    <div class="slide sl-dark" data-ch="3">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:48px;">
+          <div>
+            <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Kompass Deep-Dive · Dimension: Struktur</div>
+            <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.6vw,46px);"><em>Organisiert</em> vs.<br>Agil</h2>
+            <p style="font-size:16px;color:rgba(245,240,232,.68);line-height:1.75;margin-bottom:20px;">Der klassische Konflikt zwischen dem Architekten und dem Surfer — ein Stil-Unterschied, kein Charakterfehler.</p>
+            <div style="padding:18px 22px;border-radius:14px;background:rgba(212,101,42,.1);border:1.5px solid rgba(212,101,42,.3);">
+              <div style="font-size:12px;font-weight:700;color:var(--color-accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Der Kompass entpersonalisiert:</div>
+              <div style="font-size:14px;color:rgba(245,240,232,.75);line-height:1.7;">Es ist kein <strong style="color:#fff;">"Starrsinn" gegen "Chaos"</strong> — es ist Struktur-Stärke gegen Adaptivitäts-Stärke. Beide sind im richtigen Kontext unverzichtbar.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="padding:24px;border-radius:18px;border:2px solid rgba(196,154,42,.5);background:rgba(196,154,42,.1);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                <div style="font-size:32px;">📐</div>
+                <div><div style="font-size:16px;font-weight:700;color:#e8c860;">Der Organisierte</div><div style="font-size:11px;color:rgba(245,240,232,.4);">Hohe Struktur / Organized</div></div>
+              </div>
+              <div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;font-style:italic;">"Ich brauche einen klaren Projektplan und Meilensteine, um ruhig schlafen zu können."</div>
+              <div style="margin-top:12px;font-size:12px;color:rgba(245,240,232,.4);">Sichert: <strong style="color:rgba(245,240,232,.7);">Verlässlichkeit · Planbarkeit · Konsistenz</strong></div>
+            </div>
+            <div style="padding:24px;border-radius:18px;border:2px solid rgba(74,173,95,.5);background:rgba(74,173,95,.1);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                <div style="font-size:32px;">🏄</div>
+                <div><div style="font-size:16px;font-weight:700;color:#6dd98a;">Der Agile</div><div style="font-size:11px;color:rgba(245,240,232,.4);">Hohe Adaptivität / Adaptable</div></div>
+              </div>
+              <div style="font-size:14px;color:rgba(245,240,232,.7);line-height:1.65;font-style:italic;">"Der Kunde hat etwas Neues gewollt — ich passe den Plan sofort an. Flexibilität ist unser Vorteil."</div>
+              <div style="margin-top:12px;font-size:12px;color:rgba(245,240,232,.4);">Sichert: <strong style="color:rgba(245,240,232,.7);">Agilität · Kundennähe · Innovation</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S9 MATCHING KOMPASS (Übersicht) -->
+    <div class="slide sl-dark" data-ch="3">
+      <div class="inner">
+        <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;margin-bottom:8px;">Der Matching-Kompass</div>
+        <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.5vw,44px);">6 Dimensionen. Eine gemeinsame <em>Sprache.</em></h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;">
+          <!-- LEFT: big radar -->
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <svg viewBox="0 0 400 380" width="100%" style="max-width:380px;" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(200,195)">
+                <!-- Grid rings -->
+                <polygon points="0,-130 112.6,-65 112.6,65 0,130 -112.6,65 -112.6,-65" fill="rgba(245,240,232,0.04)" stroke="rgba(245,240,232,0.15)" stroke-width="1"/>
+                <polygon points="0,-87 75.3,-43.5 75.3,43.5 0,87 -75.3,43.5 -75.3,-43.5" fill="none" stroke="rgba(245,240,232,0.1)" stroke-width="1"/>
+                <polygon points="0,-44 38.1,-22 38.1,22 0,44 -38.1,22 -38.1,-22" fill="none" stroke="rgba(245,240,232,0.07)" stroke-width="1"/>
+                <!-- Axes -->
+                <line x1="0" y1="0" x2="0" y2="-130" stroke="rgba(245,240,232,0.14)" stroke-width="1"/>
+                <line x1="0" y1="0" x2="112.6" y2="-65" stroke="rgba(245,240,232,0.14)" stroke-width="1"/>
+                <line x1="0" y1="0" x2="112.6" y2="65" stroke="rgba(245,240,232,0.14)" stroke-width="1"/>
+                <line x1="0" y1="0" x2="0" y2="130" stroke="rgba(245,240,232,0.14)" stroke-width="1"/>
+                <line x1="0" y1="0" x2="-112.6" y2="65" stroke="rgba(245,240,232,0.14)" stroke-width="1"/>
+                <!-- Highlight axis: Action/Tatkraft -->
+                <line x1="0" y1="0" x2="-112.6" y2="-65" stroke="#D4652A" stroke-width="2.5" stroke-dasharray="5 3" opacity="0.8"/>
+                <!-- Data shape (sample) -->
+                <polygon points="0,-104 78,-46 68,56 0,87 -90,40 -58,-53" fill="rgba(212,101,42,0.14)" stroke="#D4652A" stroke-width="2.5"/>
+                <!-- Data dots -->
+                <circle cx="0"    cy="-104" r="5.5" fill="#D4652A"/>
+                <circle cx="78"   cy="-46"  r="5.5" fill="#D4652A"/>
+                <circle cx="68"   cy="56"   r="5.5" fill="#D4652A"/>
+                <circle cx="0"    cy="87"   r="5.5" fill="#D4652A"/>
+                <circle cx="-90"  cy="40"   r="5.5" fill="#D4652A"/>
+                <circle cx="-58"  cy="-53"  r="5.5" fill="#D4652A"/>
+                <!-- AXIS LABELS — bigger, high contrast -->
+                <!-- TOP: Energie -->
+                <text x="0"    y="-148" text-anchor="middle" font-size="13" fill="#F5F0E8" font-family="Outfit" font-weight="700">👥 Energie</text>
+                <!-- TOP-RIGHT: Ausrichtung -->
+                <text x="124"  y="-73"  text-anchor="start"  font-size="13" fill="#F5F0E8" font-family="Outfit" font-weight="700">🫀 Ausrichtung</text>
+                <!-- BOTTOM-RIGHT: Perspektive -->
+                <text x="124"  y="78"   text-anchor="start"  font-size="13" fill="#F5F0E8" font-family="Outfit" font-weight="700">⚙️ Perspektive</text>
+                <!-- BOTTOM: Struktur -->
+                <text x="0"    y="152"  text-anchor="middle" font-size="13" fill="#F5F0E8" font-family="Outfit" font-weight="700">🏔️ Struktur</text>
+                <!-- BOTTOM-LEFT: Assurance -->
+                <text x="-124" y="78"   text-anchor="end"    font-size="13" fill="#F5F0E8" font-family="Outfit" font-weight="700">⚓ Assurance</text>
+                <!-- TOP-LEFT: Tatkraft (highlighted) -->
+                <text x="-124" y="-73"  text-anchor="end"    font-size="14" fill="#D4652A" font-family="Outfit" font-weight="800">💨 Tatkraft ★</text>
+              </g>
+            </svg>
+            <p style="font-size:12px;color:rgba(245,240,232,.4);text-align:center;margin-top:8px;line-height:1.6;">Jedes Assessment-Ergebnis wird in das <strong style="color:rgba(245,240,232,.7);">"Wie"</strong> der Zusammenarbeit übersetzt. Kein Charakterfehler — nur ein Stil-Unterschied.</p>
+          </div>
+
+          <!-- RIGHT: legend with FULL text, high contrast -->
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <!-- Energie -->
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(245,240,232,.07);border:1.5px solid rgba(245,240,232,.18);">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(212,101,42,.2);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">👥</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:#F5F0E8;margin-bottom:3px;">Energie</div>
+                <div style="font-size:11px;color:rgba(245,240,232,.55);">Outgoing ↔ Reserved</div>
+              </div>
+            </div>
+            <!-- Ausrichtung -->
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(245,240,232,.07);border:1.5px solid rgba(245,240,232,.18);">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(196,42,42,.2);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🫀</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:#F5F0E8;margin-bottom:3px;">Ausrichtung</div>
+                <div style="font-size:11px;color:rgba(245,240,232,.55);">Fact-based ↔ People-led</div>
+              </div>
+            </div>
+            <!-- Perspektive -->
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(245,240,232,.07);border:1.5px solid rgba(245,240,232,.18);">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(212,101,42,.2);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">⚙️</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:#F5F0E8;margin-bottom:3px;">Perspektive</div>
+                <div style="font-size:11px;color:rgba(245,240,232,.55);">Pragmatic ↔ Visionary</div>
+              </div>
+            </div>
+            <!-- Tatkraft (highlighted) -->
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(212,101,42,.12);border:2px solid rgba(212,101,42,.5);">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(212,101,42,.3);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">💨</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:var(--color-accent);margin-bottom:3px;">Tatkraft / Action ★</div>
+                <div style="font-size:11px;color:rgba(212,101,42,.8);">Deliberate ↔ Spontaneous</div>
+              </div>
+            </div>
+            <!-- Struktur -->
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(245,240,232,.07);border:1.5px solid rgba(245,240,232,.18);">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(212,101,42,.2);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🏔️</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:#F5F0E8;margin-bottom:3px;">Struktur</div>
+                <div style="font-size:11px;color:rgba(245,240,232,.55);">Organized ↔ Adaptable</div>
+              </div>
+            </div>
+            <!-- Assurance -->
+            <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;background:rgba(245,240,232,.07);border:1.5px solid rgba(245,240,232,.18);">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(42,100,196,.2);font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">⚓</div>
+              <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:#F5F0E8;margin-bottom:3px;">Assurance</div>
+                <div style="font-size:11px;color:rgba(245,240,232,.55);">Self-critical ↔ Self-assured</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S10 DAS COCKPIT -->
+    <div class="slide sl-dark" data-ch="4">
+      <div class="inner">
+        <div class="cols c6040" style="align-items:center;gap:40px;">
+          <div>
+            <div class="lbl lbl-d">App in Aktion</div>
+            <h2 class="h2 h2-l" style="margin-bottom:18px;">Das digitale <em>Cockpit</em><br>für Ihr Team</h2>
+            <p class="body body-d" style="margin-bottom:20px;">Als Führungskraft haben Sie nicht die Zeit für wochenlange Workshops. The Strength Hack übernimmt die Übersetzungsarbeit — in Sekunden, nicht Monaten.</p>
+            <div class="feat"><div class="feat-icon">🗺️</div><div><div class="feat-title">Die Team-Landkarte</div><div class="feat-body">Alle Mitglieder auf dem Kompass. Ballungen &amp; Lücken auf einen Blick.</div></div></div>
+            <div class="feat hi" style="margin-top:9px;"><div class="feat-icon">🔮</div><div><div class="feat-title">Team Personas: Soul / Gaps / Shadow</div><div class="feat-body">Was ist die Stärke? Was fehlt? Wie bricht das Team unter Druck zusammen?</div></div></div>
+            <div class="feat" style="margin-top:9px;"><div class="feat-icon">🗂️</div><div><div class="feat-title">Delegation Matrix</div><div class="feat-body">Aufgaben nach Stärken verteilen statt Mikromanagement.</div></div></div>
+            <div style="margin-top:14px;padding:10px 14px;border-radius:10px;background:rgba(196,154,42,.07);border:1px solid rgba(196,154,42,.18);">
+              <div style="font-size:10px;color:rgba(196,154,42,.78);font-weight:600;">💡 Live-Demo · App öffnen · +5 Min für Zwischenfragen einplanen</div>
+            </div>
+          </div>
+          <div class="mockup">
+            <div class="mockup-bar"><div class="mdot mdot-r"></div><div class="mdot mdot-y"></div><div class="mdot mdot-g"></div><div class="mockup-url">strength-hack.com · Team Dashboard</div></div>
+            <div class="mockup-body">
+              <div class="m-sec">Team Profiles</div>
+              <div class="m-row"><div class="m-av" style="background:rgba(212,101,42,.6);">E</div><div><div class="m-name">Emma K.</div><div class="m-role">Product Lead</div></div><div class="m-tag m-tag-o">Visionär · Impulsiv</div></div>
+              <div class="m-row"><div class="m-av" style="background:rgba(42,100,196,.6);">M</div><div><div class="m-name">Marc S.</div><div class="m-role">Tech Lead</div></div><div class="m-tag m-tag-b">Analytisch · Bedacht</div></div>
+              <div class="m-row"><div class="m-av" style="background:rgba(40,167,69,.6);">L</div><div><div class="m-name">Lisa T.</div><div class="m-role">Scrum Master</div></div><div class="m-tag m-tag-g">Organisiert</div></div>
+              <div style="margin-top:12px;"><div class="m-sec">Delegation Matrix</div>
+                <div class="m-matrix">
+                  <div class="m-cell">KI-Review</div><div class="m-cell hot">Architektur→M</div><div class="m-cell">Planung</div>
+                  <div class="m-cell hot">Vision→E</div><div class="m-cell">Koordination</div><div class="m-cell hot">Prozesse→L</div>
+                </div>
+              </div>
+              <div class="m-shadow"><div class="m-shadow-t">⚡ Shadow Trigger Density</div><div class="m-shadow-bar"><div class="m-shadow-fill"></div></div><div class="m-shadow-sub">4 von 6 → Rückzug unter Druck</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S11 PERSONAL AI COACH -->
+    <div class="slide sl-dark" data-ch="4">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:44px;">
+          <div>
+            <div class="lbl lbl-d">KI-gestützte Führung</div>
+            <h2 class="h2 h2-l" style="margin-bottom:18px;">Ihr persönlicher<br><em>AI Coach</em></h2>
+            <p class="body body-d" style="margin-bottom:20px;">Wenn es im Alltag klemmt, haben Sie einen direkten Berater — mit konkreter Maßarbeit für Ihre Führungssituation.</p>
+            <div class="feat"><div class="feat-icon">🔄</div><div><div class="feat-title">Synergy-Analyse</div><div class="feat-body">"Wie führe ich als faktenbasierter Manager einen emotional-intuitiven Mitarbeiter?" — konkrete Antworten, keine Theorie.</div></div></div>
+            <div class="feat" style="margin-top:9px;"><div class="feat-icon">🎯</div><div><div class="feat-title">Stärken-basiertes Delegieren</div><div class="feat-body">Wer führt das Krisengespräch? Wer strukturiert den Prozess? Die Matrix zeigt es sofort.</div></div></div>
+            <div class="feat" style="margin-top:9px;"><div class="feat-icon">📊</div><div><div class="feat-title">Team-Berichte &amp; PDF-Export</div><div class="feat-body">Präsentationsfertige Analysen für Ihr nächstes Leadership-Meeting — in Minuten.</div></div></div>
+          </div>
+          <div class="mockup">
+            <div class="mockup-bar"><div class="mdot mdot-r"></div><div class="mdot mdot-y"></div><div class="mdot mdot-g"></div><div class="mockup-url">AI Coach · Synergy</div></div>
+            <div class="mockup-body">
+              <div class="m-sec">Führungsfrage</div>
+              <div style="padding:9px 11px;border-radius:9px;background:rgba(212,101,42,.1);border:1px solid rgba(212,101,42,.18);font-size:10px;color:rgba(245,240,232,.68);line-height:1.55;margin-bottom:10px;">"Wie führe ich meinen Mitarbeiter Marc (Bedacht/Analytisch) als sehr impulsive Führungskraft am besten?"</div>
+              <div class="m-sec">AI Antwort</div>
+              <div style="padding:9px 11px;border-radius:9px;background:rgba(245,240,232,.04);border:1px solid rgba(245,240,232,.06);font-size:10px;color:rgba(245,240,232,.58);line-height:1.6;margin-bottom:10px;">Marc braucht <strong style="color:var(--color-text-on-dark);">Vorbereitungszeit</strong> vor Entscheidungen. Schicke Agendas 24h vorher. Nutze <strong style="color:var(--color-text-on-dark);">schriftliche Zusammenfassungen</strong>. Anerkenne explizit seinen <strong style="color:var(--color-text-on-dark);">Qualitätsfokus</strong>...</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                <span style="padding:3px 8px;border-radius:var(--radius-pill);font-size:8px;font-weight:600;background:rgba(212,101,42,.12);color:var(--color-accent);border:1px solid rgba(212,101,42,.2);">Kommunikation</span>
+                <span style="padding:3px 8px;border-radius:var(--radius-pill);font-size:8px;font-weight:600;background:rgba(212,101,42,.12);color:var(--color-accent);border:1px solid rgba(212,101,42,.2);">Delegation</span>
+                <span style="padding:3px 8px;border-radius:var(--radius-pill);font-size:8px;font-weight:600;background:rgba(212,101,42,.12);color:var(--color-accent);border:1px solid rgba(212,101,42,.2);">Konflikt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S12 ROI -->
+    <div class="slide sl-dark" data-ch="5">
+      <div class="inner">
+        <div class="cols c2" style="align-items:center;gap:44px;">
+          <div>
+            <div class="lbl lbl-d">ROI &amp; Ergebnisse</div>
+            <h2 class="h2 h2-l" style="margin-bottom:18px;">Performance in<br>der <em>KI-Ära</em></h2>
+            <p class="body body-d" style="margin-bottom:16px;">Das Ziel ist nicht, dass wir uns alle lieber mögen. Das Ziel ist messbare Effizienz für Müller.</p>
+            <div class="ac-card">
+              <div style="font-family:var(--font-heading);font-style:italic;font-size:15px;color:rgba(245,240,232,.58);line-height:1.6;">"Sie können Menschen nicht verändern. Aber Sie können die Rahmenbedingungen so gestalten, dass ihre natürlichen Stärken produktiv werden."</div>
+            </div>
+          </div>
+          <div class="roi-grid">
+            <div class="roi-tile"><div class="roi-icon">⚡</div><div><div class="roi-title">Schnellere Entscheidungen</div><div class="roi-body">Rollen auf Stärken basiert — kein Ping-Pong</div></div></div>
+            <div class="roi-tile"><div class="roi-icon">📉</div><div><div class="roi-title">Weniger Meeting-Last</div><div class="roi-body">Jeder weiß, wie das Gegenüber tickt</div></div></div>
+            <div class="roi-tile"><div class="roi-icon">🎯</div><div><div class="roi-title">Besseres Staffing</div><div class="roi-body">Flow statt Frust — naturgemäß performen</div></div></div>
+            <div class="roi-tile"><div class="roi-icon">💎</div><div><div class="roi-title">Retain Talent</div><div class="roi-body">Innere Kündigung: 40 % → 1 %</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S13 START & Q&A -->
+    <div class="slide sl-warm" data-ch="5">
+      <div class="inner inner-c">
+        <div class="lbl">Jetzt starten</div>
+        <h2 class="h2" style="text-align:center;margin:0 auto 8px;max-width:580px;">Hol das Maximum<br>aus euch heraus</h2>
+        <p class="body" style="text-align:center;max-width:460px;margin:0 auto 30px;">Kein monatelanges IT-Projekt. Bestehende Testergebnisse importieren, Team einladen — sofort loslegen.</p>
+        <div style="display:flex;max-width:740px;margin:0 auto 30px;">
+          <div class="start-step"><div class="start-step-num">1</div><div class="start-step-title">Anmelden</div><div class="start-step-body">Kostenlos auf<br>strength-hack.com</div></div>
+          <div class="start-step"><div class="start-step-num">2</div><div class="start-step-title">Ergebnisse importieren</div><div class="start-step-body">CliftonStrengths-Daten in Sekunden</div></div>
+          <div class="start-step"><div class="start-step-num">3</div><div class="start-step-title">Team einladen</div><div class="start-step-body">Analyse starten &amp; Führungsstil schärfen</div></div>
+        </div>
+        <a href="https://strength-hack.com" class="btn-p" style="font-size:15px;padding:15px 38px;">Kostenlos starten → strength-hack.com</a>
+        <div style="margin-top:36px;padding-top:28px;border-top:1px solid var(--color-border);">
+          <div style="font-family:var(--font-heading);font-size:26px;color:var(--color-text);margin-bottom:7px;">Q &amp; A</div>
+          <p style="font-size:12px;color:var(--color-text-muted);max-width:440px;margin:0 auto;line-height:1.65;font-style:italic;">"Wir orchestrieren Talente, statt Schwächen zu managen."</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /slides -->
+</main>
+</div>
+
+<script>
+const SLIDES = [...document.querySelectorAll('.slide')];
+const TOTAL  = SLIDES.length;
+const CH_MAP = SLIDES.map(s => +s.dataset.ch);
+const CH_START = [0, 3, 11, 15, 21, 23]; // first slide per chapter (6 chapters, 24 total)
+
+let cur = 0;
+
+// build dots
+const dotsWrap = document.getElementById('sbDots');
+SLIDES.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'sb-dot';
+  d.textContent = i + 1;
+  d.onclick = () => goTo(i);
+  dotsWrap.appendChild(d);
+});
+
+function ui() {
+  document.getElementById('cCur').textContent = cur + 1;
+  document.getElementById('cTot').textContent = TOTAL;
+  dotsWrap.querySelectorAll('.sb-dot').forEach((d,i) => d.classList.toggle('active', i === cur));
+  document.querySelectorAll('.sb-ch').forEach((el, i) => el.classList.toggle('active', i === CH_MAP[cur]));
+}
+
+function goTo(next) {
+  if (next < 0 || next >= TOTAL || next === cur) return;
+  const prev = cur;
+  SLIDES[prev].classList.remove('active');
+  SLIDES[prev].classList.add('exit');
+  setTimeout(() => SLIDES[prev].classList.remove('exit'), 450);
+  cur = next;
+  SLIDES[cur].classList.add('active');
+  ui();
+}
+function go(d) { goTo(cur + d); }
+function goChapter(i) { goTo(CH_START[i] ?? 0); }
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); go(1); }
+  if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); go(-1); }
+  if (e.key === 'Home') goTo(0);
+  if (e.key === 'End')  goTo(TOTAL - 1);
+});
+
+ui();
+</script>
+</body>
+</html>
