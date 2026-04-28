@@ -201,8 +201,18 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
 .m-shadow-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#d95555,var(--color-accent));width:67%;}
 .m-shadow-sub{font-size:8px;color:rgba(245,240,232,.28);margin-top:3px;}
 
-/* NEW SLIDE MARKER — small star, non-overlapping */
-.new-marker{position:absolute;top:12px;right:14px;width:22px;height:22px;border-radius:50%;background:rgba(196,154,42,.22);border:1px solid rgba(196,154,42,.5);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--color-warm-gold);z-index:10;flex-shrink:0;pointer-events:none;}
+/* NEW SLIDE MARKER — small star fixed to slide corner, never overlapping */
+.new-marker{position:absolute;top:16px;right:18px;width:24px;height:24px;border-radius:50%;background:rgba(196,154,42,.25);border:1.5px solid rgba(196,154,42,.55);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--color-warm-gold);z-index:200;pointer-events:none;line-height:1;}
+
+/* SKIP-MODE: hide new slides when active */
+body.skip-new .slide[data-new="1"] { display:none !important; }
+
+/* Mode toggle button */
+.mode-btn{position:absolute;bottom:20px;left:14px;z-index:200;display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:var(--radius-pill);border:1px solid var(--color-border-dark);background:rgba(245,240,232,.05);cursor:pointer;font-family:var(--font-body);font-size:11px;font-weight:600;color:rgba(245,240,232,.45);letter-spacing:.3px;transition:all .2s ease;}
+.mode-btn:hover{background:rgba(245,240,232,.1);color:rgba(245,240,232,.7);}
+.mode-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--color-warm-gold);flex-shrink:0;opacity:.6;}
+body.skip-new .mode-btn{background:rgba(212,101,42,.15);border-color:rgba(212,101,42,.35);color:var(--color-accent);}
+body.skip-new .mode-btn .dot{background:var(--color-accent);opacity:1;}
 
 /* ROI */
 .roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -233,7 +243,7 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-name">The Strength <span>Hack</span></div>
-    <div class="sb-logo-sub">Leadership Kickoff 2025</div>
+    <div class="sb-logo-sub">Leadership Kickoff 2026</div>
   </div>
   <div class="sb-chapters" id="sbCh">
     <div class="sb-ch active" onclick="goChapter(0)"><div class="sb-ch-num">Teil 1</div><div class="sb-ch-title">Hook & Problem</div></div>
@@ -251,13 +261,16 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
   <div class="counter"><span class="n" id="cCur">1</span> / <span id="cTot">13</span></div>
   <button class="arr arr-prev" onclick="go(-1)">←</button>
   <button class="arr arr-next" onclick="go(1)">→</button>
+  <button class="mode-btn" id="modeBtn" onclick="toggleMode()" title="Umschalten zwischen 1h und 2h Modus">
+    <span class="dot"></span><span id="modeLbl">2h Modus</span>
+  </button>
 
   <div class="slides" id="slidesEl">
 
     <!-- S1 TITEL -->
     <div class="slide sl-dark sl-grid active" data-ch="0">
       <div class="inner inner-c">
-        <div class="badge">Führungsteam · Strength Hack Kickoff 2025</div>
+        <div class="badge">Führungsteam · Strength Hack Kickoff 2026</div>
         <h1 class="h1" style="max-width:780px;margin:0 auto 20px;font-size:clamp(32px,5.5vw,68px);">
           Vom Testergebnis<br>zur <em>Team-Excellence</em>
         </h1>
@@ -390,7 +403,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S5a NEUROSCIENCE: AUTOBAHN vs FELDWEG ★ NEU -->
     <div class="slide sl-dark" data-ch="1">
       <div class="inner inner-c">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Neurobiologie</div>
         <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 32px;max-width:680px;font-size:clamp(26px,3.8vw,50px);">Die Autobahn vs. <em>der Feldweg</em></h2>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;">
@@ -425,7 +437,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S5b GALLUP META-ANALYSE ★ NEU -->
     <div class="slide sl-dark" data-ch="1">
       <div class="inner inner-c">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Gallup Meta-Analyse · 50.000 Geschäftseinheiten</div>
         <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 32px;max-width:720px;font-size:clamp(26px,4vw,52px);">Ressourcen-Management ist <em>gnadenlos effizient.</em></h2>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:860px;margin:0 auto 24px;">
@@ -583,7 +594,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S7a DIE 4 TALENT CLUSTER ★ NEU -->
     <div class="slide sl-dark" data-ch="2">
       <div class="inner inner-c">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">CliftonStrengths · Teil 3</div>
         <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 28px;max-width:680px;font-size:clamp(24px,3.6vw,46px);">Die Matrix der <em>Zusammenarbeit</em></h2>
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:840px;margin:0 auto 20px;">
@@ -623,7 +633,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S7b DAS 70% ENERGIE-AUDIT ★ NEU -->
     <div class="slide sl-dark" data-ch="2">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="cols c2" style="align-items:center;gap:44px;">
           <div>
             <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Das 70% Energie-Audit</div>
@@ -670,7 +679,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S7c DER JOB CRAFTING FIX ★ NEU -->
     <div class="slide sl-dark" data-ch="2">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="cols c2" style="align-items:center;gap:48px;">
           <div>
             <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Der Job Crafting Fix</div>
@@ -710,7 +718,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S7d INTERAKTIVE ÜBUNG ★ NEU -->
     <div class="slide sl-dark" data-ch="2">
       <div class="inner inner-c">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Interaktive Übung · 10 Minuten</div>
         <h2 class="h2 h2-l" style="text-align:center;margin:0 auto 28px;max-width:680px;font-size:clamp(26px,3.8vw,50px);">Jetzt <em>direkt anwenden</em></h2>
         <!-- Timer visual -->
@@ -791,7 +798,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S8a WARUM STAR-ENSEMBLES SCHEITERN (TMS) ★ NEU -->
     <div class="slide sl-dark" data-ch="3">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="cols c2" style="align-items:center;gap:48px;">
           <div>
             <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Transactive Memory System</div>
@@ -837,7 +843,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S8b APOLLO 13 ★ NEU -->
     <div class="slide sl-dark" data-ch="3">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="cols c2" style="align-items:center;gap:48px;">
           <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
             <div style="width:100%;border-radius:20px;background:linear-gradient(135deg,rgba(30,25,15,.95),rgba(20,18,12,.98));border:1.5px solid rgba(245,240,232,.1);padding:32px;text-align:center;position:relative;overflow:hidden;">
@@ -881,7 +886,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S9a KOMPASS DEEP-DIVE: IMPULSIV vs BEDACHT ★ NEU -->
     <div class="slide sl-dark" data-ch="3">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="cols c2" style="align-items:center;gap:48px;">
           <div>
             <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Kompass Deep-Dive · Dimension: Tatkraft</div>
@@ -917,7 +921,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S9b KOMPASS DEEP-DIVE: ORGANISIERT vs AGIL ★ NEU -->
     <div class="slide sl-dark" data-ch="3">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="cols c2" style="align-items:center;gap:48px;">
           <div>
             <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;">Kompass Deep-Dive · Dimension: Struktur</div>
@@ -953,7 +956,6 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
     <!-- S9 MATCHING KOMPASS (Übersicht) ★ NEU -->
     <div class="slide sl-dark" data-ch="3">
       <div class="inner">
-        <div class="new-marker" title="Neu hinzugefügt">★</div>
         <div class="lbl lbl-d" style="font-size:12px;letter-spacing:3px;margin-bottom:8px;">Der Matching-Kompass</div>
         <h2 class="h2 h2-l" style="margin-bottom:20px;font-size:clamp(24px,3.5vw,44px);">6 Dimensionen. Eine gemeinsame <em>Sprache.</em></h2>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;">
@@ -1145,14 +1147,33 @@ body{font-family:var(--font-body);background:var(--color-bg-dark);color:var(--co
 </div>
 
 <script>
+// ── NEW SLIDES: listed by comment markers in HTML ──────────────────────────
+// We tag new slides via data-new="1" and inject the star directly into the slide.
+// New slides are: S5a(idx3), S5b(idx4), S7a(idx9), S7b(idx10), S7c(idx11),
+// S7d(idx12), S8a(idx14), S8b(idx15), S9a(idx16), S9b(idx17), S9(idx18)
+const NEW_SLIDE_INDICES = new Set([3,4,9,10,11,12,14,15,16,17,18]);
+
 const SLIDES = [...document.querySelectorAll('.slide')];
 const TOTAL  = SLIDES.length;
 const CH_MAP = SLIDES.map(s => +s.dataset.ch);
-const CH_START = [0, 3, 9, 13, 19, 21]; // first slide per chapter (6 chapters, 23 total)
+const CH_START = [0, 3, 9, 13, 19, 21];
 
 let cur = 0;
+let skipNew = false;
 
-// build dots
+// Tag & mark new slides
+SLIDES.forEach((slide, i) => {
+  if (NEW_SLIDE_INDICES.has(i)) {
+    slide.dataset.new = '1';
+    const star = document.createElement('div');
+    star.className = 'new-marker';
+    star.title = 'Neu hinzugefügt (2h Modus)';
+    star.textContent = '★';
+    slide.appendChild(star); // append directly to slide, always top-right of slide
+  }
+});
+
+// Build dots
 const dotsWrap = document.getElementById('sbDots');
 SLIDES.forEach((_, i) => {
   const d = document.createElement('div');
@@ -1162,15 +1183,36 @@ SLIDES.forEach((_, i) => {
   dotsWrap.appendChild(d);
 });
 
+// Visible slides (respecting skip mode)
+function visibleSlides() {
+  return SLIDES.filter((s, i) => !(skipNew && NEW_SLIDE_INDICES.has(i)));
+}
+
 function ui() {
-  document.getElementById('cCur').textContent = cur + 1;
-  document.getElementById('cTot').textContent = TOTAL;
-  dotsWrap.querySelectorAll('.sb-dot').forEach((d,i) => d.classList.toggle('active', i === cur));
+  const vis = visibleSlides();
+  const visPos = vis.indexOf(SLIDES[cur]);
+  document.getElementById('cCur').textContent = visPos + 1;
+  document.getElementById('cTot').textContent = vis.length;
+  dotsWrap.querySelectorAll('.sb-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === cur);
+    d.style.opacity = (skipNew && NEW_SLIDE_INDICES.has(i)) ? '0.2' : '1';
+  });
   document.querySelectorAll('.sb-ch').forEach((el, i) => el.classList.toggle('active', i === CH_MAP[cur]));
 }
 
 function goTo(next) {
-  if (next < 0 || next >= TOTAL || next === cur) return;
+  if (next < 0 || next >= TOTAL) return;
+  // Skip new slides if in 1h mode
+  if (skipNew && NEW_SLIDE_INDICES.has(next)) {
+    const dir = next > cur ? 1 : -1;
+    let candidate = next + dir;
+    while (candidate >= 0 && candidate < TOTAL && skipNew && NEW_SLIDE_INDICES.has(candidate)) {
+      candidate += dir;
+    }
+    if (candidate < 0 || candidate >= TOTAL) return;
+    next = candidate;
+  }
+  if (next === cur) return;
   const prev = cur;
   SLIDES[prev].classList.remove('active');
   SLIDES[prev].classList.add('exit');
@@ -1179,14 +1221,42 @@ function goTo(next) {
   SLIDES[cur].classList.add('active');
   ui();
 }
-function go(d) { goTo(cur + d); }
-function goChapter(i) { goTo(CH_START[i] ?? 0); }
+
+function go(d) {
+  const vis = visibleSlides();
+  const curVis = vis.indexOf(SLIDES[cur]);
+  const nextVis = curVis + d;
+  if (nextVis < 0 || nextVis >= vis.length) return;
+  const nextSlide = vis[nextVis];
+  goTo(SLIDES.indexOf(nextSlide));
+}
+
+function goChapter(i) {
+  let target = CH_START[i] ?? 0;
+  if (skipNew && NEW_SLIDE_INDICES.has(target)) {
+    while (target < TOTAL && NEW_SLIDE_INDICES.has(target)) target++;
+  }
+  goTo(target);
+}
+
+function toggleMode() {
+  skipNew = !skipNew;
+  document.body.classList.toggle('skip-new', skipNew);
+  document.getElementById('modeLbl').textContent = skipNew ? '1h Modus' : '2h Modus';
+  // If current slide is now hidden, advance
+  if (skipNew && NEW_SLIDE_INDICES.has(cur)) {
+    go(1);
+    return;
+  }
+  ui();
+}
 
 document.addEventListener('keydown', e => {
   if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); go(1); }
   if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); go(-1); }
   if (e.key === 'Home') goTo(0);
   if (e.key === 'End')  goTo(TOTAL - 1);
+  if (e.key === 'm' || e.key === 'M') toggleMode(); // M key to toggle mode
 });
 
 ui();
