@@ -374,6 +374,8 @@ em.accent { font-style: italic; color: var(--orange); }
 
 /* ── Hero image ── */
 .hero-image {
+  align-self: stretch;   /* fills the grid cell height exactly */
+  width: 100%;
   border-radius: 28px;
   overflow: hidden;
   background: #20322F;
@@ -863,14 +865,14 @@ em.accent { font-style: italic; color: var(--orange); }
   background: var(--card-dark);
   border: 1px solid var(--on-dark-line);
   border-radius: 24px;
-  padding: 44px 48px;
+  padding: 24px 36px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
 }
 .roi-num {
   font-family: var(--font-dm-serif);
-  font-size: 88px;
+  font-size: 72px;
   letter-spacing: -2px;
   color: var(--orange);
   line-height: 1;
@@ -1148,7 +1150,7 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
 
         <div>
-          <div class="hero-image" style="aspect-ratio:4/5;height:auto;">
+          <div class="hero-image">
             <img src="assets/milo-strengths.jpg" alt="Milo strengths">
           </div>
         </div>
@@ -1633,26 +1635,26 @@ em.accent { font-style: italic; color: var(--orange); }
           <p class="sub" style="margin-bottom:40px;max-width:680px;">
             Homogene Stärken erzeugen blinde Flecken — heterogene Teams gewinnen.
           </p>
-          <div class="stack" style="gap:20px;">
-            <div class="card-dark" style="padding:32px 36px;display:flex;align-items:flex-start;gap:20px;">
+          <div class="stack" style="gap:16px;">
+            <div class="card-dark" style="padding:20px 24px;display:flex;align-items:center;gap:20px;">
               <div style="font-family:var(--font-dm-serif);font-size:48px;color:var(--orange);line-height:1;flex-shrink:0;">01</div>
               <div>
-                <div style="font-size:var(--type-body);font-weight:600;color:var(--on-dark);margin-bottom:8px;">Das TMS-Prinzip</div>
-                <div class="small">Jeder weiß, wer bei welchem Problem das Steuer übernimmt — kein Abstimmungsrunde nötig.</div>
+                <div style="font-size:var(--type-body);font-weight:600;color:var(--on-dark);margin-bottom:6px;">Das TMS-Prinzip</div>
+                <div class="small">Klare Rollen — kein Abstimmen nötig.</div>
               </div>
             </div>
-            <div class="card-orange" style="padding:32px 36px;display:flex;align-items:flex-start;gap:20px;">
+            <div class="card-orange" style="padding:20px 24px;display:flex;align-items:center;gap:20px;">
               <div style="font-family:var(--font-dm-serif);font-size:48px;color:var(--orange);line-height:1;flex-shrink:0;">02</div>
               <div>
-                <div style="font-size:var(--type-body);font-weight:600;color:var(--orange);margin-bottom:8px;">Blinde Flecken vermeiden</div>
-                <div class="small">Homogene Star-Teams übersehen Risiken, die ein Teamkollege mit anderen Stärken sofort sieht.</div>
+                <div style="font-size:var(--type-body);font-weight:600;color:var(--orange);margin-bottom:6px;">Blinde Flecken vermeiden</div>
+                <div class="small">Diverse Stärken sehen, was Homogenität übersieht.</div>
               </div>
             </div>
-            <div class="card-dark" style="padding:32px 36px;display:flex;align-items:flex-start;gap:20px;">
+            <div class="card-dark" style="padding:20px 24px;display:flex;align-items:center;gap:20px;">
               <div style="font-family:var(--font-dm-serif);font-size:48px;color:#6dd98a;line-height:1;flex-shrink:0;">03</div>
               <div>
-                <div style="font-size:var(--type-body);font-weight:600;color:#6dd98a;margin-bottom:8px;">Distributed Memory</div>
-                <div class="small">KI-Architektur → Marc. Kundengespräch → Emma. Prozess-Chaos → Lisa. Kein Single Point of Failure.</div>
+                <div style="font-size:var(--type-body);font-weight:600;color:#6dd98a;margin-bottom:6px;">Distributed Memory</div>
+                <div class="small">Kein Single Point of Failure im Team.</div>
               </div>
             </div>
           </div>
@@ -1889,30 +1891,40 @@ em.accent { font-style: italic; color: var(--orange); }
         <div class="page-num">21 / 26</div>
       </div>
 
-      <h2 class="h2" style="margin-bottom:56px;">
-        Vier Dimensionen — ein <em class="accent">gemeinsames Bild</em>.
+      <h2 class="h2" style="margin-bottom:36px;">
+        6 Dimensionen — eine gemeinsame <em class="accent">Sprache</em>.
       </h2>
 
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:28px;flex:1;min-height:0;">
-        <div class="card-orange" style="padding:44px 48px;">
-          <div class="eyebrow" style="margin-bottom:16px;">Dimension 1 · Aktion</div>
-          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1px;color:var(--on-dark);margin-bottom:20px;">Impulsiv ↔ Bedacht</div>
-          <div class="body" style="color:var(--on-dark-2);">Wie schnell trifft jemand Entscheidungen? Reaktiv oder mit Vorlaufzeit?</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;min-height:0;">
+        <div class="card-dark" style="padding:32px 36px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="eyebrow" style="margin-bottom:12px;">Dimension 1</div>
+          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1.5px;color:var(--on-dark);line-height:1.0;margin-bottom:10px;">Energie</div>
+          <div class="small" style="color:var(--on-dark-2);">Kontaktfreudig ↔ Zurückhaltend</div>
         </div>
-        <div class="card-dark" style="padding:44px 48px;">
-          <div class="eyebrow" style="margin-bottom:16px;">Dimension 2 · Struktur</div>
-          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1px;color:var(--on-dark);margin-bottom:20px;">Organisiert ↔ Agil</div>
-          <div class="body" style="color:var(--on-dark-2);">Wie geht jemand mit Planung und Wandel um? Systeme oder Flexibilität?</div>
+        <div class="card-dark" style="padding:32px 36px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="eyebrow" style="margin-bottom:12px;">Dimension 2</div>
+          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1.5px;color:var(--on-dark);line-height:1.0;margin-bottom:10px;">Ausrichtung</div>
+          <div class="small" style="color:var(--on-dark-2);">Faktenbasiert ↔ Menschen-orientiert</div>
         </div>
-        <div class="card-dark" style="padding:44px 48px;">
-          <div class="eyebrow" style="margin-bottom:16px;">Dimension 3 · Fokus</div>
-          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1px;color:var(--on-dark);margin-bottom:20px;">Konzept ↔ Detail</div>
-          <div class="body" style="color:var(--on-dark-2);">Denkt jemand in großen Bildern oder in präzisen Details und Zahlen?</div>
+        <div class="card-dark" style="padding:32px 36px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="eyebrow" style="margin-bottom:12px;">Dimension 3</div>
+          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1.5px;color:var(--on-dark);line-height:1.0;margin-bottom:10px;">Perspektive</div>
+          <div class="small" style="color:var(--on-dark-2);">Pragmatisch ↔ Visionär</div>
         </div>
-        <div class="card-dark" style="padding:44px 48px;">
-          <div class="eyebrow" style="margin-bottom:16px;">Dimension 4 · Energie</div>
-          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1px;color:var(--on-dark);margin-bottom:20px;">Extravertiert ↔ Introvertiert</div>
-          <div class="body" style="color:var(--on-dark-2);">Woher kommt Energie — aus Austausch mit anderen oder aus Vertiefung allein?</div>
+        <div class="card-orange" style="padding:32px 36px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="eyebrow" style="margin-bottom:12px;">Dimension 4 ★</div>
+          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1.5px;color:var(--on-dark);line-height:1.0;margin-bottom:10px;">Aktion</div>
+          <div class="small" style="color:var(--on-dark-2);">Bedacht ↔ Spontan</div>
+        </div>
+        <div class="card-dark" style="padding:32px 36px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="eyebrow" style="margin-bottom:12px;">Dimension 5</div>
+          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1.5px;color:var(--on-dark);line-height:1.0;margin-bottom:10px;">Struktur</div>
+          <div class="small" style="color:var(--on-dark-2);">Organisiert ↔ Anpassungsfähig</div>
+        </div>
+        <div class="card-dark" style="padding:32px 36px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="eyebrow" style="margin-bottom:12px;">Dimension 6</div>
+          <div style="font-family:var(--font-dm-serif);font-size:56px;letter-spacing:-1.5px;color:var(--on-dark);line-height:1.0;margin-bottom:10px;">Sicherheit</div>
+          <div class="small" style="color:var(--on-dark-2);">Selbstkritisch ↔ Selbstbewusst</div>
         </div>
       </div>
 
@@ -2060,7 +2072,7 @@ em.accent { font-style: italic; color: var(--orange); }
         <div class="page-num">25 / 26</div>
       </div>
 
-      <h2 class="h2" style="margin-bottom:56px;">
+      <h2 class="h2" style="margin-bottom:36px;">
         Was stärkenbasierte Führung <em class="accent">wirklich kostet</em>.
       </h2>
 
@@ -2076,7 +2088,7 @@ em.accent { font-style: italic; color: var(--orange); }
           <div class="roi-desc">Mehr braucht es nicht. Bestehende Meetings werden zum Stärken-Format — kein Extra-Aufwand.</div>
         </div>
         <div class="roi-tile">
-          <div class="roi-num" style="font-size:88px;">–72%</div>
+          <div class="roi-num">–72%</div>
           <div class="roi-label">Fluktuation</div>
           <div class="roi-desc">Stärken-fokussierte Teams zeigen bis zu 72% weniger Kündigungen — Gallup Meta-Analyse.</div>
         </div>
@@ -2095,54 +2107,48 @@ em.accent { font-style: italic; color: var(--orange); }
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
-       S13 START & Q&A  beige · data-ch=5
+       S13 START & Q&A  dark · data-ch=5
        ══════════════════════════════════════════════════════════ -->
-  <div class="slide beige" data-ch="5">
+  <div class="slide dark" data-ch="5">
     <div class="frame between">
       <div class="top-bar">
-        <div class="eyebrow">Next Steps</div>
+        <div class="eyebrow">Next Steps · Q &amp; A</div>
         <div class="page-num">26 / 26</div>
       </div>
 
-      <div class="grid-2" style="gap:100px;align-items:center;flex:1;min-height:0;">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:56px;">
         <div>
-          <h2 class="h2" style="color:var(--ink);margin-bottom:44px;">
-            So starten wir <em class="accent">heute</em>.
+          <div class="eyebrow" style="margin-bottom:20px;">So starten wir</div>
+          <h2 class="h2" style="max-width:1000px;">
+            Drei Schritte bis zur <em class="accent">ersten Messung</em>.
           </h2>
+        </div>
 
-          <div class="roadmap" style="grid-template-columns:repeat(3,1fr);margin-top:0;margin-bottom:48px;">
-            <div class="roadmap-step" style="padding-top:36px;">
-              <div class="roadmap-week" style="background:var(--beige);">Schritt 1</div>
-              <div class="roadmap-title" style="color:var(--ink);">Kickoff</div>
-              <div class="roadmap-body" style="color:var(--ink-2);">Ergebnisse importieren. Team einladen. In Sekunden loslegen.</div>
-            </div>
-            <div class="roadmap-step" style="padding-top:36px;">
-              <div class="roadmap-week" style="background:var(--beige);">Schritt 2</div>
-              <div class="roadmap-title" style="color:var(--ink);">Stärken-Karte</div>
-              <div class="roadmap-body" style="color:var(--ink-2);">Team-Canvas erstellen. Hebel pro Person identifizieren.</div>
-            </div>
-            <div class="roadmap-step" style="padding-top:36px;">
-              <div class="roadmap-week" style="background:var(--beige);">Schritt 3</div>
-              <div class="roadmap-title" style="color:var(--ink);">Re-Score</div>
-              <div class="roadmap-body" style="color:var(--ink-2);">Nach 4 Wochen messen. Sehen wir keinen Hebel — sagen wir es.</div>
-            </div>
+        <div class="roadmap" style="margin-top:0;">
+          <div class="roadmap-step">
+            <div class="roadmap-week">Schritt 1</div>
+            <div class="roadmap-title">Kickoff</div>
+            <div class="roadmap-body">Ergebnisse importieren. Team einladen. In Sekunden loslegen.</div>
           </div>
-
-          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
-            <div class="pill solid" style="font-size:var(--type-body);">→ strength-hack.com</div>
-            <div style="font-size:var(--type-body);color:var(--ink-2);">Jetzt starten</div>
+          <div class="roadmap-step">
+            <div class="roadmap-week">Schritt 2</div>
+            <div class="roadmap-title">Stärken-Karte</div>
+            <div class="roadmap-body">Team-Canvas erstellen. Hebel pro Person identifizieren.</div>
+          </div>
+          <div class="roadmap-step">
+            <div class="roadmap-week">Schritt 3</div>
+            <div class="roadmap-title">Re-Score</div>
+            <div class="roadmap-body">Nach 4 Wochen messen. Kein Hebel — wir sagen es.</div>
           </div>
         </div>
 
         <div>
-          <div class="hero-image" style="aspect-ratio:4/5;height:auto;">
-            <img src="assets/milo-growth.jpg" alt="Milo growth">
-          </div>
+          <div class="pill solid" style="font-size:var(--type-sub);padding:20px 56px;">→ strength-hack.com</div>
         </div>
       </div>
 
       <div class="bottom-bar">
-        <div>strength-hack.com · Jetzt starten</div>
+        <div>Fragen? Jetzt ist der richtige Moment.</div>
         <div class="source-line">Q &amp; A</div>
       </div>
     </div>
