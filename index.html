@@ -258,11 +258,12 @@ html, body {
 /* ── Frame ── */
 .frame {
   position: absolute;
-  inset: 0;
-  /* Extra bottom padding reserves space for the absolutely-positioned bottom-bar */
-  padding: var(--pad-top) var(--pad-x) calc(var(--pad-bottom) + 68px);
+  top: 0; left: 0; right: 0;
+  bottom: var(--pad-bottom);   /* ends 90px above slide bottom — leaves room for bottom-bar */
+  padding: var(--pad-top) var(--pad-x) 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;            /* hard-clips content at frame boundary, protecting the bottom-bar */
 }
 .frame.between { justify-content: space-between; }
 .frame.center  { justify-content: center; align-items: center; }
@@ -284,10 +285,10 @@ html, body {
 }
 .beige .page-num, .slide:not(.dark) .page-num { color: var(--ink-2); }
 
-/* ── Bottom bar — always anchored to the slide bottom ── */
+/* ── Bottom bar — sibling of .frame, anchored to slide bottom ── */
 .bottom-bar {
   position: absolute;
-  bottom: var(--pad-bottom);
+  bottom: 20px;                /* 20px gap from slide edge */
   left: var(--pad-x);
   right: var(--pad-x);
   display: flex;
@@ -958,11 +959,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>strength-hack.com</div>
         <div>60-Minuten Kickoff</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1015,11 +1016,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>strength-hack.com</div>
         <div class="source-line">Führungsmodell 2026</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1058,11 +1059,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Quelle · Gallup 2026</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1123,11 +1124,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Google Project Aristotle · 2015</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1156,11 +1157,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Defizite verwalten kostet Energie. Stärken entfalten erzeugt Exzellenz.</div>
         <div class="source-line">Paradigmenwechsel</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1213,11 +1214,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Don Clifton · Gallup</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1260,11 +1261,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Donald Hebb · 1949</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1305,11 +1306,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="sub" style="font-size:var(--type-body);color:var(--on-dark-2);">Gieße die Blumen — nicht die Steine.</div>
         <div class="source-line">Quelle · Gallup Q12 Meta-Analyse</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1344,11 +1345,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Gallup · Strengths-Based Development</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1401,11 +1402,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>strength-hack.com</div>
         <div class="source-line">Die Schubladen-Falle</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1445,11 +1446,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="small">Kein Alleskönner — ein Spitzenteam braucht alle vier Domänen.</div>
         <div class="source-line">CliftonStrengths · Gallup</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1484,11 +1485,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="small">Übung: Schreibe deine 5 häufigsten Aufgaben auf und ordne jede einer Farbe zu.</div>
         <div class="source-line">Energie-Audit</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1523,11 +1524,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="quote" style="font-size:var(--type-body);color:var(--on-dark-2);">„Dein Feldweg ist die Autobahn für jemand anderen."</div>
         <div class="source-line">Job Crafting</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1560,11 +1561,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Teile deine Antwort mit der Person neben dir.</div>
         <div class="source-line">Flow-Analyse</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1609,11 +1610,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Reibung ist kein Charakterfehler — sondern unterschiedliche Stile.</div>
         <div class="source-line">Tuckman · 1965</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1665,11 +1666,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Transactive Memory System · Wegner 1987</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1709,11 +1710,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Kein homogenes Team hätte überlebt — Diversität der Stärken war die Rettung.</div>
         <div class="source-line">Mission Control Houston · April 1970</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1764,11 +1765,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Daniel Kahneman · Thinking Fast and Slow · 2011</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1819,11 +1820,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Kein Stil ist besser — beide brauchen einander.</div>
         <div class="source-line">Strengths-Kompass</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1874,11 +1875,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Beide Stile sind unverzichtbar — besonders in unsicheren Zeiten.</div>
         <div class="source-line">Strengths-Kompass</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1928,11 +1929,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">The Strength Hack · Kompass</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1977,11 +1978,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>strength-hack.com</div>
         <div class="source-line">The Strength Hack · 4-Wochen Sprint</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -2016,11 +2017,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>strength-hack.com · Live-Demo verfügbar</div>
         <div class="source-line">Das digitale Cockpit</div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -2055,11 +2056,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">AI-Coach · strength-hack.com</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -2099,11 +2100,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div class="source-line">Gallup · ROI stärkenbasierter Führung</div>
         <div></div>
       </div>
-    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -2147,11 +2148,11 @@ em.accent { font-style: italic; color: var(--orange); }
         </div>
       </div>
 
+    </div>
       <div class="bottom-bar">
         <div>Fragen? Jetzt ist der richtige Moment.</div>
         <div class="source-line">Q &amp; A</div>
       </div>
-    </div>
   </div>
 
   </div><!-- /slides-wrap -->
